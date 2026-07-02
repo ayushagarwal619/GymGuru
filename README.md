@@ -5,52 +5,73 @@
 
 Real-time posture correction, rep counting, intelligent voice coaching, and workout analytics powered by Computer Vision and Generative AI.
 
+<br>
+
 ![Python](https://img.shields.io/badge/Python-3.11-blue?style=for-the-badge)
-![GitHub Stars](https://img.shields.io/github/stars/ayushagarwal619/GymGuru?style=for-the-badge)
 ![Streamlit](https://img.shields.io/badge/Streamlit-App-red?style=for-the-badge)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-Pose-green?style=for-the-badge)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-blue?style=for-the-badge)
 ![Groq](https://img.shields.io/badge/Groq-AI-orange?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-black?style=for-the-badge)
 
-
 </div>
+
+<br>
 
 ---
 
-# 📖 Overview
+<div align="center">
+
+## 📖 Overview
+
+</div>
 
 GymGuru is an AI-powered virtual fitness trainer that analyzes your workout in real-time using Computer Vision.
 
 Instead of simply counting repetitions, GymGuru continuously monitors body posture, evaluates exercise form, detects mistakes, and provides intelligent AI-generated voice coaching during workouts.
 
 The application runs through a modern browser using Streamlit and WebRTC, making professional workout guidance accessible without expensive hardware.
+
 ---
 
-# ✨ Features
+<div align="center">
 
-## 🎯 Real-Time Pose Detection
+## ✨ Features
+
+### 🎯 Real-Time Pose Detection
+
+</div>
 
 - Live webcam tracking via `streamlit-webrtc`
 - 33-point body landmark detection with MediaPipe's `PoseLandmarker`
 - Real-time joint-angle calculation and movement analysis
 - Skeleton overlay drawn directly on the video feed
 
----
+<br>
 
-## 🏋 Supported Exercises
+<div align="center">
 
-- ✅ Squats
-- ✅ Push-ups
-- ✅ Biceps Curl (Dumbbell)
-- ✅ Shoulder Press
-- ✅ Lunges
+### 🏋 Supported Exercises
+
+</div>
+
+<div align="center">
+
+✅ Squats &nbsp;&nbsp;|&nbsp;&nbsp; ✅ Push-ups &nbsp;&nbsp;|&nbsp;&nbsp; ✅ Biceps Curl (Dumbbell) &nbsp;&nbsp;|&nbsp;&nbsp; ✅ Shoulder Press &nbsp;&nbsp;|&nbsp;&nbsp; ✅ Lunges
+
+</div>
+
+<br>
 
 Each exercise has its own custom detector class built on a shared `BaseExercise` abstraction (angle math + rep state machine).
 
----
+<br>
 
-## 🔢 Intelligent Rep Counter
+<div align="center">
+
+### 🔢 Intelligent Rep Counter
+
+</div>
 
 Automatically tracks:
 
@@ -59,23 +80,31 @@ Automatically tracks:
 - Sets Completed vs. Target Sets
 - Total Workout Duration (time per set cycle)
 
----
+<br>
 
-## 🧠 AI Form Analysis
+<div align="center">
+
+### 🧠 AI Form Analysis
 
 GymGuru continuously monitors:
 
 | Exercise | Metrics Tracked |
-|---|---|
+|:---:|:---:|
 | **Squats** | Knee angle, back angle, squat depth |
 | **Push-ups** | Elbow angle, body alignment, hip sag/pike |
 | **Biceps Curl** | Elbow angle, shoulder stability, swing detection |
 | **Shoulder Press** | Elbow angle, arm extension, back arch |
 | **Lunges** | Front knee angle, torso angle, balance |
 
----
+</div>
 
-## 🤖 AI Voice Coach
+<br>
+
+<div align="center">
+
+### 🤖 AI Voice Coach
+
+</div>
 
 Integrated with **Groq's LLaMA 3.3 70B** model to provide dynamic, natural-language coaching, converted to audio via `gTTS` and auto-played in-browser.
 
@@ -89,9 +118,13 @@ Feedback is generated for key events:
 
 Voice cues are rate-limited so the coach doesn't talk over itself.
 
----
+<br>
 
-## 👤 User Authentication
+<div align="center">
+
+### 👤 User Authentication
+
+</div>
 
 Lightweight username-based login system (no password) that:
 
@@ -99,9 +132,13 @@ Lightweight username-based login system (no password) that:
 - Scopes workout history to that user
 - Persists the session across reruns via `st.session_state`
 
----
+<br>
 
-## 📊 Workout History
+<div align="center">
+
+### 📊 Workout History
+
+</div>
 
 Automatically stores and aggregates:
 
@@ -115,10 +152,12 @@ History is grouped by exercise + date and displayed in a clean table after every
 
 ---
 
-# 🛠 Tech Stack
+<div align="center">
+
+## 🛠 Tech Stack
 
 | Category | Technology |
-|-----------|------------|
+|:---:|:---:|
 | Language | Python 3.11 |
 | Frontend | Streamlit |
 | Computer Vision | OpenCV (headless) |
@@ -129,9 +168,15 @@ History is grouped by exercise + date and displayed in a clean table after every
 | Data Analysis | Pandas |
 | Database | SQLite |
 
+</div>
+
 ---
 
-# 🏗 Project Architecture
+<div align="center">
+
+## 🏗 Project Architecture
+
+</div>
 
 ```
 gym-guru/
@@ -168,7 +213,11 @@ gym-guru/
 
 ---
 
-# ⚙️ Installation
+<div align="center">
+
+## ⚙️ Installation
+
+</div>
 
 Clone the repository:
 
@@ -194,7 +243,11 @@ uv pip install -r requirements.txt
 
 > ⚠️ Run these commands from inside `Main App/` — that's where `main.py` and `requirements.txt` live.
 
+<div align="center">
+
 ### System Dependencies (Linux / Streamlit Cloud)
+
+</div>
 
 Already declared in `packages.txt`:
 
@@ -213,7 +266,11 @@ streamlit run main.py
 
 ---
 
-# 🔑 Environment Variables
+<div align="center">
+
+## 🔑 Environment Variables
+
+</div>
 
 Create a `.env` file inside `Main App/`:
 
@@ -229,7 +286,9 @@ GROQ_API_KEY = "YOUR_API_KEY"
 
 ---
 
-# 🚀 Workflow
+<div align="center">
+
+## 🚀 Workflow
 
 ```
 User Login
@@ -262,23 +321,15 @@ Set/Workout Completion Saved to SQLite
 Workout History Displayed
 ```
 
----
-
-# 📸 Screenshots
-
-Add your screenshots here.
-
-```
-screenshots/
-├── home.png
-├── workout.png
-├── history.png
-└── dashboard.png
-```
+</div>
 
 ---
 
-# 🎯 Future Improvements
+<div align="center">
+
+## 🎯 Future Improvements
+
+</div>
 
 - More exercises (deadlifts, planks, jumping jacks)
 - Personal workout planner
@@ -294,7 +345,11 @@ screenshots/
 
 ---
 
-# 💡 Why GymGuru?
+<div align="center">
+
+## 💡 Why GymGuru?
+
+</div>
 
 Unlike traditional rep counters, GymGuru combines:
 
@@ -308,7 +363,11 @@ into a single, browser-based virtual personal trainer — no wearables, no extra
 
 ---
 
-# 🤝 Contributing
+<div align="center">
+
+## 🤝 Contributing
+
+</div>
 
 Contributions are welcome!
 
@@ -320,23 +379,30 @@ Contributions are welcome!
 
 ---
 
-# ⭐ Support
+<div align="center">
+
+## ⭐ Support
 
 If you found this project useful, please consider giving it a ⭐ on GitHub.
 
 It helps the project grow and motivates further development.
 
+</div>
+
 ---
 
-# 📄 License
+<div align="center">
+
+## 📄 License
 
 Distributed under the **MIT License**. See `LICENSE` for more information.
+
+</div>
 
 ---
 
 <div align="center">
 
 ### 🏋️ Train Smarter with AI
-
 
 </div>
