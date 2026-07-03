@@ -65,12 +65,20 @@ img { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 .nav-logo {
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.15em;
-  color: var(--text);
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.1;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(135deg, #60d7ff 0%, #8c6bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: text-shadow 0.25s ease, transform 0.25s ease;
 }
-.logo-bracket { color: var(--amber); }
+.nav-logo:hover {
+  text-shadow: 0 0 18px rgba(96, 215, 255, 0.28);
+}
 
 .nav-links {
   display: flex;

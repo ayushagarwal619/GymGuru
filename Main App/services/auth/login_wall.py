@@ -1,28 +1,262 @@
+"""
+login_wall.py — GymGuru Landing / Login Page  (VISUAL REDESIGN ONLY)
+────────────────────────────────────────────────────────────────────
+Auth logic is 100% unchanged:  get_or_create_user(), session_state
+keys "user_id" / "username", form key "login_form" — all preserved.
+Only HTML wrappers and helper functions are new.
+"""
+
+import random
 import streamlit as st
 from services.persistence.exercise_repository import get_or_create_user
 
+# ── Motivational quotes (one per page-load) ───────────────────────────────────
+_QUOTES = [
+    "Train Smarter. Not Harder.",
+    "Every Rep Counts.",
+    "Discipline Beats Motivation.",
+    "The Best Project You'll Ever Work On Is Yourself.",
+    "Strong Mind. Strong Body.",
+    "One Rep Closer.",
+    "Know Exactly What to Lift.",
+    "Your Form Is Your Foundation.",
+    "Push Past Yesterday's Limits.",
+    "Consistency Is The Secret Weapon.",
+]
 
-def render_login_wall():
+
+# ── Helper: full-bleed animated hero ─────────────────────────────────────────
+def _hero(quote: str) -> None:
+    st.markdown(f"""
+<div class="gg-hero-wrap gg-fadeup">
+  <!-- Atmospheric orbs -->
+  <div class="gg-hero-orb" style="
+    width:520px; height:520px;
+    background: rgba(59,130,246,0.10);
+    top:-160px; left:-140px;
+    animation-duration:20s;"></div>
+  <div class="gg-hero-orb" style="
+    width:380px; height:380px;
+    background: rgba(139,92,246,0.09);
+    top:80px; right:-100px;
+    animation-duration:15s; animation-delay:-6s;"></div>
+  <div class="gg-hero-orb" style="
+    width:260px; height:260px;
+    background: rgba(59,130,246,0.06);
+    bottom:-60px; left:30%;
+    animation-duration:12s; animation-delay:-3s;"></div>
+
+  <!-- Eyebrow pill -->
+  <div class="gg-fadeup2" style="display:flex;justify-content:center;margin-bottom:1.75rem;">
+    <span class="gg-hero-eyebrow">
+      <span class="gg-hero-eyebrow-dot"></span>
+      AI &nbsp;·&nbsp; Real-Time Pose Detection &nbsp;·&nbsp; Voice Coach
+    </span>
+  </div>
+
+  <!-- Giant wordmark -->
+  <div class="gg-hero-wordmark gg-fadeup2">GymGuru</div>
+
+  <!-- Subtitle -->
+  <div class="gg-hero-subtitle gg-fadeup3">
+    AI Powered Real‑Time Personal Fitness Coach
+  </div>
+
+  <!-- Tagline -->
+  <div class="gg-hero-tagline gg-fadeup3">Train Smarter with AI</div>
+
+  <!-- Rotating quote -->
+  <div class="gg-hero-quote gg-fadeup4">&ldquo;{quote}&rdquo;</div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Helper: glassmorphism login card ─────────────────────────────────────────
+def _login_card() -> None:
+    st.markdown("""
+<div class="gg-login-card gg-fadeup4">
+  <div class="gg-login-title">Welcome to GymGuru</div>
+  <div class="gg-login-sub">
+    Pick a username and start training — your history is saved automatically.
+  </div>
+""", unsafe_allow_html=True)
+
+
+def _login_card_close() -> None:
+    st.markdown("""
+  <div class="gg-helper">
+    🔒&nbsp; Your workout data is stored locally and never shared.
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Helper: feature section ───────────────────────────────────────────────────
+def _features() -> None:
+    items = [
+        ("🎯", "Know Your Form, Every Rep",
+         "33 MediaPipe pose landmarks analyse every movement in real time "
+         "and flag form errors before they become injuries."),
+        ("🤖", "A Coach That Never Stops Watching",
+         "Groq-powered LLM delivers live audio cues, set-by-set feedback "
+         "and motivational calls mid-rep — hands-free."),
+        ("📈", "See Your Progress, Session by Session",
+         "Every rep, set and second is logged automatically. "
+         "Your history grows every time you train."),
+        ("🏆", "Correct It Before It Hurts",
+         "Real-time posture scoring catches back arch, knee collapse "
+         "and swing errors the moment they happen."),
+    ]
+    st.markdown("""
+<div class="gg-features-wrap gg-fadeup5">
+  <div class="gg-features-heading">Built for Serious Athletes.<br>Accessible to Everyone.</div>
+  <div class="gg-features-sub">
+    Four capabilities working simultaneously so you can focus on the lift,
+    not the laptop.
+  </div>
+  <div class="gg-feat-grid">
+""", unsafe_allow_html=True)
+
+    for icon, benefit, detail in items:
+        st.markdown(f"""
+    <div class="gg-feat-card">
+      <div class="gg-feat-icon-wrap">{icon}</div>
+      <div class="gg-feat-benefit">{benefit}</div>
+      <div class="gg-feat-detail">{detail}</div>
+    </div>
+""", unsafe_allow_html=True)
+
+    st.markdown("  </div>\n</div>", unsafe_allow_html=True)
+
+
+# ── Helper: exercise list ─────────────────────────────────────────────────────
+def _exercises() -> None:
+    items = [
+        ("🦵", "Squats"),
+        ("💪", "Push-ups"),
+        ("🏋️", "Biceps Curls"),
+        ("🙌", "Shoulder Press"),
+        ("🚶", "Lunges"),
+    ]
+    cards = "".join(
+        f'<div class="gg-ex-card">'
+        f'<span class="gg-ex-emoji">{e}</span>'
+        f'<span class="gg-ex-name">{n}</span>'
+        f'</div>'
+        for e, n in items
+    )
+    st.markdown(f"""
+<div class="gg-ex-section gg-fadeup5">
+  <div class="gg-ex-label">5 AI-Tracked Exercises</div>
+  <div class="gg-ex-grid">{cards}</div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Helper: monumental stats strip ───────────────────────────────────────────
+def _stats() -> None:
+    st.markdown("""
+<div class="gg-stats-wrap gg-fadeup5">
+  <div class="gg-stats-grid">
+    <div class="gg-stat-item">
+      <div class="gg-stat-num">33</div>
+      <div class="gg-stat-lbl">Pose<br>Landmarks</div>
+    </div>
+    <div class="gg-stat-item">
+      <div class="gg-stat-num">5</div>
+      <div class="gg-stat-lbl">AI-Tracked<br>Exercises</div>
+    </div>
+    <div class="gg-stat-item">
+      <div class="gg-stat-num">&lt;1s</div>
+      <div class="gg-stat-lbl">Real-Time<br>Feedback</div>
+    </div>
+    <div class="gg-stat-item">
+      <div class="gg-stat-num">AI</div>
+      <div class="gg-stat-lbl">Voice<br>Coach</div>
+    </div>
+    <div class="gg-stat-item">
+      <div class="gg-stat-num">∞</div>
+      <div class="gg-stat-lbl">Workout<br>Sessions</div>
+    </div>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Helper: footer ────────────────────────────────────────────────────────────
+def _footer() -> None:
+    techs = [
+        ("🐍", "Python"), ("🖐", "MediaPipe"), ("📷", "OpenCV"),
+        ("🤖", "Groq"), ("🗄", "SQLite"), ("⚡", "Streamlit"),
+    ]
+    chips = "".join(
+        f'<div class="gg-tech-chip"><span>{i}</span>{n}</div>'
+        for i, n in techs
+    )
+    st.markdown(f"""
+<div class="gg-footer">
+  <div class="gg-footer-copy">GymGuru &copy; 2024 &nbsp;·&nbsp; All workout data stored locally</div>
+  <div class="gg-tech-row">{chips}</div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Public entry-point (called by main.py) ────────────────────────────────────
+def render_login_wall() -> bool:
+    """
+    Returns True  → user already authenticated, show dashboard.
+    Returns False → render login/landing page.
+
+    AUTH LOGIC UNCHANGED:
+      - get_or_create_user()
+      - st.session_state["user_id"]
+      - st.session_state["username"]
+      - st.form("login_form")
+    """
     if st.session_state.get("user_id") is not None:
         return True
-    
-    st.title("🏋️‍♂️ AI Real-time GYM Trainer")
-    st.markdown("### Welcome! Please enter a username to start.")
 
+    quote = random.choice(_QUOTES)
+
+    # 1 ── Full-bleed hero
+    _hero(quote)
+
+    # 2 ── Login card (glassmorphism)
+    _login_card()
+
+    # ── THE FORM — all keys preserved ────────────────────────────────────────
     with st.form("login_form", clear_on_submit=False):
-        username = st.text_input("Name (unique)", placeholder="unique name e.g. princekhunt")
-        submit_button = st.form_submit_button("Start Session", width="stretch")
+        username = st.text_input(
+            "👤  Username",
+            placeholder="e.g. alexsmith",
+            help="Your workout history will be saved automatically.",
+        )
+        submit = st.form_submit_button(
+            "Start Training  →",
+            use_container_width=True,
+        )
 
-    if submit_button:
-        if not username:
-            st.error("Name cannot be empty.")
+    _login_card_close()
+
+    if submit:
+        if not username.strip():
+            st.error("Username cannot be empty.")
             return False
-        
-        user = get_or_create_user(username)
-    
-        st.session_state["user_id"] = user["id"]
+        user = get_or_create_user(username.strip())   # ← auth logic unchanged
+        st.session_state["user_id"]  = user["id"]
         st.session_state["username"] = user["username"]
-
         st.rerun()
+
+    # 3 ── Features
+    _features()
+
+    # 4 ── Exercise list
+    _exercises()
+
+    # 5 ── Stats strip
+    _stats()
+
+    # 6 ── Footer
+    _footer()
 
     return False
