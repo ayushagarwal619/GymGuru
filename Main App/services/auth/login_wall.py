@@ -69,38 +69,40 @@ def _hero(quote: str) -> None:
 def _features() -> None:
     items = [
         ("🎯", "Know Your Form, Every Rep",
-         "33 MediaPipe pose landmarks analyse every movement in real time "
+         "33 MediaPipe pose landmarks analyze every movement in real time "
          "and flag form errors before they become injuries."),
-        ("🤖", "A Coach That Never Stops Watching",
+        ("🔊", "A Coach That Never Stops Watching",
          "Groq-powered LLM delivers live audio cues, set-by-set feedback "
          "and motivational calls mid-rep — hands-free."),
         ("📈", "See Your Progress, Session by Session",
          "Every rep, set and second is logged automatically. "
          "Your history grows every time you train."),
-        ("🏆", "Correct It Before It Hurts",
+        ("🛡️", "Correct It Before It Hurts",
          "Real-time posture scoring catches back arch, knee collapse "
          "and swing errors the moment they happen."),
     ]
     st.markdown("""
-<div class="gg-features-wrap gg-fadeup5">
-  <div class="gg-features-heading">Built for Serious Athletes.<br>Accessible to Everyone.</div>
+<div id="features">
+  <div class="gg-features-heading">Built for Serious Athletes. Accessible to Everyone.</div>
   <div class="gg-features-sub">
-    Four capabilities working simultaneously so you can focus on the lift,
-    not the laptop.
+    Four capabilities working simultaneously so you can focus on the lift, not the laptop.
   </div>
-  <div class="gg-feat-grid">
+  <div class="gg-features-grid">
 """, unsafe_allow_html=True)
 
-    for icon, benefit, detail in items:
+    for icon, title, desc in items:
         st.markdown(f"""
-    <div class="gg-feat-card">
-      <div class="gg-feat-icon-wrap">{icon}</div>
-      <div class="gg-feat-benefit">{benefit}</div>
-      <div class="gg-feat-detail">{detail}</div>
+    <div class="gg-feature-card">
+      <div class="gg-feature-icon">{icon}</div>
+      <div class="gg-feature-title">{title}</div>
+      <div class="gg-feature-desc">{desc}</div>
     </div>
 """, unsafe_allow_html=True)
 
-    st.markdown("  </div>\n</div>", unsafe_allow_html=True)
+    st.markdown("""
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ── Helper: exercise list ─────────────────────────────────────────────────────
