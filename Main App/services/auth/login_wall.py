@@ -191,10 +191,38 @@ def _footer() -> None:
         for i, n in techs
     )
     st.markdown(f"""
-<div class="gg-footer">
-  <div class="gg-footer-copy">GymGuru &copy; 2024 &nbsp;·&nbsp; All workout data stored locally</div>
-  <div class="gg-tech-row">{chips}</div>
-</div>
+<footer class="gg-footer">
+  <div class="gg-footer-grid">
+    <div class="gg-footer-col">
+      <div class="gg-footer-logo-wrap">
+        <span class="gg-footer-logo">🏋️</span>
+        <span class="gg-footer-brand">GymGuru</span>
+      </div>
+      <div class="gg-footer-desc">
+        AI Powered Real-Time Personal Fitness Coach that helps you train smarter, safer, and stronger every day.
+      </div>
+    </div>
+    <div class="gg-footer-col">
+      <div class="gg-footer-title">Quick Links</div>
+      <a href="#features" class="gg-footer-link">Features</a>
+      <a href="#how-it-works" class="gg-footer-link">How It Works</a>
+      <a href="#about" class="gg-footer-link">About</a>
+    </div>
+    <div class="gg-footer-col">
+      <div class="gg-footer-title">Connect</div>
+      <a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a>
+      <a href="#" class="gg-footer-link">Documentation</a>
+      <a href="#" class="gg-footer-link">Support</a>
+    </div>
+  </div>
+  <div class="gg-tech-row">
+    {chips}
+  </div>
+  <div class="gg-footer-bottom">
+    <div class="gg-footer-copy">&copy; 2024 GymGuru. All rights reserved.</div>
+    <div class="gg-footer-heart">Built with <span>&hearts;</span> and AI</div>
+  </div>
+</footer>
 """, unsafe_allow_html=True)
 
 
