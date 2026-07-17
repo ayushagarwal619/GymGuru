@@ -129,30 +129,34 @@ def _exercises() -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Helper: monumental stats strip ───────────────────────────────────────────
 def _stats() -> None:
     st.markdown("""
-<div class="gg-stats-wrap gg-fadeup5">
+<div class="gg-stats-card" id="about">
   <div class="gg-stats-grid">
-    <div class="gg-stat-item">
-      <div class="gg-stat-num">33</div>
-      <div class="gg-stat-lbl">Pose<br>Landmarks</div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">🏃</div>
+      <div class="gg-stat-value">33</div>
+      <div class="gg-stat-label">Pose Landmarks</div>
     </div>
-    <div class="gg-stat-item">
-      <div class="gg-stat-num">5</div>
-      <div class="gg-stat-lbl">AI-Tracked<br>Exercises</div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">🏋️</div>
+      <div class="gg-stat-value">5</div>
+      <div class="gg-stat-label">Exercises</div>
     </div>
-    <div class="gg-stat-item">
-      <div class="gg-stat-num">&lt;1s</div>
-      <div class="gg-stat-lbl">Real-Time<br>Feedback</div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">⚡</div>
+      <div class="gg-stat-value">&lt;1s</div>
+      <div class="gg-stat-label">Feedback</div>
     </div>
-    <div class="gg-stat-item">
-      <div class="gg-stat-num">AI</div>
-      <div class="gg-stat-lbl">Voice<br>Coach</div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">🔊</div>
+      <div class="gg-stat-value">AI Coach</div>
+      <div class="gg-stat-label">Voice Feedback</div>
     </div>
-    <div class="gg-stat-item">
-      <div class="gg-stat-num">∞</div>
-      <div class="gg-stat-lbl">Workout<br>Sessions</div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">📅</div>
+      <div class="gg-stat-value">∞</div>
+      <div class="gg-stat-label">Sessions</div>
     </div>
   </div>
 </div>
