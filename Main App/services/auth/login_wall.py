@@ -115,16 +115,16 @@ def _exercises() -> None:
         ("🚶", "Lunges"),
     ]
     cards = "".join(
-        f'<div class="gg-ex-card">'
-        f'<span class="gg-ex-emoji">{e}</span>'
-        f'<span class="gg-ex-name">{n}</span>'
+        f'<div class="gg-exercise-chip">'
+        f'<span class="gg-exercise-icon">{e}</span>'
+        f'<span class="gg-exercise-name">{n}</span>'
         f'</div>'
         for e, n in items
     )
     st.markdown(f"""
-<div class="gg-ex-section gg-fadeup5">
-  <div class="gg-ex-label">5 AI-Tracked Exercises</div>
-  <div class="gg-ex-grid">{cards}</div>
+<div class="gg-exercises-section" id="how-it-works">
+  <div class="gg-exercises-label">AI-Tracked Exercises</div>
+  <div class="gg-exercises-grid">{cards}</div>
 </div>
 """, unsafe_allow_html=True)
 
