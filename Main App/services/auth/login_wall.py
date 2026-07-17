@@ -62,24 +62,7 @@ def _hero(quote: str) -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Helper: glassmorphism login card ─────────────────────────────────────────
-def _login_card() -> None:
-    st.markdown("""
-<div class="gg-login-card gg-fadeup4">
-  <div class="gg-login-title">Welcome to GymGuru</div>
-  <div class="gg-login-sub">
-    Pick a username and start training — your history is saved automatically.
-  </div>
-""", unsafe_allow_html=True)
-
-
-def _login_card_close() -> None:
-    st.markdown("""
-  <div class="gg-helper">
-    🔒&nbsp; Your workout data is stored locally and never shared.
-  </div>
-</div>
-""", unsafe_allow_html=True)
+# Login Card is styled directly via div[data-testid="stForm"] in style.css
 
 
 # ── Helper: feature section ───────────────────────────────────────────────────
@@ -224,22 +207,35 @@ def render_login_wall() -> bool:
     # 1 ── Full-bleed hero
     _hero(quote)
 
-    # 2 ── Login card (glassmorphism)
-    _login_card()
-
     # ── THE FORM — all keys preserved ────────────────────────────────────────
     with st.form("login_form", clear_on_submit=False):
+        st.markdown("""
+        <div class="gg-login-header" id="login-card">
+          <div class="gg-login-title">👋 Welcome to GymGuru!</div>
+          <div class="gg-login-desc">
+            Pick a username and start training — your history is saved automatically.
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
+
         username = st.text_input(
             "👤  Username",
             placeholder="e.g. alexsmith",
             help="Your workout history will be saved automatically.",
         )
+
         submit = st.form_submit_button(
-            "Start Training  →",
+            "Start Training  &rarr;",
             use_container_width=True,
         )
 
-    _login_card_close()
+        st.markdown("""
+        <div class="gg-login-footer">
+          <div class="gg-privacy-note">
+            <span>🔒</span> Your workout data is stored locally and never shared.
+          </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     if submit:
         if not username.strip():
