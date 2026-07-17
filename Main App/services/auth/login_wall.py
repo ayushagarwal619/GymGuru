@@ -47,48 +47,17 @@ def _navbar() -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Helper: full-bleed animated hero ─────────────────────────────────────────
+# ── Helper: Centered Hero ─────────────────────────────────────────────────────
 def _hero(quote: str) -> None:
     st.markdown(f"""
-<div class="gg-hero-wrap gg-fadeup">
-  <!-- Atmospheric orbs -->
-  <div class="gg-hero-orb" style="
-    width:520px; height:520px;
-    background: rgba(59,130,246,0.10);
-    top:-160px; left:-140px;
-    animation-duration:20s;"></div>
-  <div class="gg-hero-orb" style="
-    width:380px; height:380px;
-    background: rgba(139,92,246,0.09);
-    top:80px; right:-100px;
-    animation-duration:15s; animation-delay:-6s;"></div>
-  <div class="gg-hero-orb" style="
-    width:260px; height:260px;
-    background: rgba(59,130,246,0.06);
-    bottom:-60px; left:30%;
-    animation-duration:12s; animation-delay:-3s;"></div>
-
-  <!-- Eyebrow pill -->
-  <div class="gg-fadeup2" style="display:flex;justify-content:center;margin-bottom:1.75rem;">
-    <span class="gg-hero-eyebrow">
-      <span class="gg-hero-eyebrow-dot"></span>
-      AI &nbsp;·&nbsp; Real-Time Pose Detection &nbsp;·&nbsp; Voice Coach
-    </span>
+<div class="gg-hero">
+  <div class="gg-hero-badge">
+    <span>🤖</span> AI &nbsp;·&nbsp; Real-Time Pose Detection &nbsp;·&nbsp; Voice Coach
   </div>
-
-  <!-- Giant wordmark -->
-  <div class="gg-hero-wordmark gg-fadeup2">GymGuru</div>
-
-  <!-- Subtitle -->
-  <div class="gg-hero-subtitle gg-fadeup3">
-    AI Powered Real‑Time Personal Fitness Coach
-  </div>
-
-  <!-- Tagline -->
-  <div class="gg-hero-tagline gg-fadeup3">Train Smarter with AI</div>
-
-  <!-- Rotating quote -->
-  <div class="gg-hero-quote gg-fadeup4">&ldquo;{quote}&rdquo;</div>
+  <div class="gg-hero-subtitle">AI Powered Real‑Time Personal Fitness Coach</div>
+  <h1 class="gg-hero-title">Gym<span class="title-gradient">Guru</span></h1>
+  <div class="gg-hero-tagline">Train Smarter with AI</div>
+  <div class="gg-hero-quote">&ldquo;{quote}&rdquo;</div>
 </div>
 """, unsafe_allow_html=True)
 
