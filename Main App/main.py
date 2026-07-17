@@ -274,7 +274,7 @@ def main():
         page_icon="🏋️",
         page_title="GymGuru — AI Fitness Coach",
         initial_sidebar_state="expanded",
-        layout="centered",
+        layout="wide",
     )
 
     # CSS + font (calls unchanged)

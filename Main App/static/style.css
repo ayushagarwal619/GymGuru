@@ -75,7 +75,7 @@
 /* ── Layout ────────────────────────────────────────────────── */
 .block-container {
   padding: 0 2.5rem 5rem !important;
-  max-width: 900px !important;
+  max-width: 1200px !important;
   position: relative;
   z-index: 1;
 }
