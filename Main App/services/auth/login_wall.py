@@ -25,6 +25,28 @@ _QUOTES = [
 ]
 
 
+# ── Helper: Navbar ───────────────────────────────────────────────────────────
+def _navbar() -> None:
+    st.markdown("""
+<header class="gg-navbar">
+  <div class="gg-navbar-container">
+    <a href="#" class="gg-navbar-brand">
+      <span class="gg-navbar-logo">🏋️</span>
+      <span class="gg-navbar-title">GymGuru</span>
+    </a>
+    <div class="gg-navbar-menu">
+      <a href="#features" class="gg-navbar-link">Features</a>
+      <a href="#how-it-works" class="gg-navbar-link">How It Works</a>
+      <a href="#about" class="gg-navbar-link">About</a>
+    </div>
+    <div class="gg-navbar-cta">
+      <a href="#login-card" class="gg-navbar-btn">Get Started &rarr;</a>
+    </div>
+  </div>
+</header>
+""", unsafe_allow_html=True)
+
+
 # ── Helper: full-bleed animated hero ─────────────────────────────────────────
 def _hero(quote: str) -> None:
     st.markdown(f"""
@@ -217,6 +239,18 @@ def render_login_wall() -> bool:
         return True
 
     quote = random.choice(_QUOTES)
+
+    # ── Custom CSS for wide container on login wall ──
+    st.markdown("""
+    <style>
+    .block-container {
+        max-width: 1280px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # 0 ── Navbar
+    _navbar()
 
     # 1 ── Full-bleed hero
     _hero(quote)
