@@ -689,8 +689,8 @@ div[data-testid="stForm"] {
 .gg-cta-banner {
   background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #C084FC 100%);
   border-radius: var(--radius) !important;
-  padding: 3rem !important; /* Visually balanced padding */
-  margin-top: 64px !important; /* Precise Stats -> CTA gap */
+  padding: 2rem 3rem !important; /* Compact padding */
+  margin-top: 48px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 64px */
   display: flex;
   justify-content: space-between;
   align-items: center;
