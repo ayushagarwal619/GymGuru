@@ -285,7 +285,7 @@ p, li, span, label {
   justify-content: space-between;
   align-items: center;
   max-width: 1350px !important; /* Centers and locks navbar width matching block-container */
-  padding: 0 5% !important; /* Matches exactly side gutters */
+  padding: 0 !important; /* Align perfectly with block-container bounds */
   margin: 0 auto !important;
   width: 100%;
 }
