@@ -717,8 +717,8 @@ label[data-testid="stWidgetLabel"] {
 .gg-cta-banner {
   background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #C084FC 100%);
   border-radius: var(--radius) !important;
-  padding: 2rem 3rem !important; /* Compact padding */
-  margin-top: 48px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 64px */
+  padding: 1.75rem 2.5rem !important; /* Extremely compact premium padding */
+  margin-top: 24px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 40px */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -740,27 +740,18 @@ label[data-testid="stWidgetLabel"] {
   z-index: 1;
 }
 
-.gg-cta-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0.75rem;
-}
-
 .gg-cta-title {
-  font-size: 2rem !important;
+  font-size: 30px !important; /* Section Title 30px spec */
   font-weight: 800 !important;
   color: #fff !important;
   letter-spacing: -0.03em !important;
-  margin-bottom: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
 }
 
 .gg-cta-subtitle {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.5;
+  font-size: 16px !important; /* Body 16px spec */
+  color: rgba(255, 255, 255, 0.8) !important;
+  line-height: 1.4;
 }
 
 .gg-cta-right {

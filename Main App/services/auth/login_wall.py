@@ -184,13 +184,11 @@ def _cta() -> None:
     st.markdown("""
 <div class="gg-cta-banner">
   <div class="gg-cta-left">
-    <div class="gg-cta-badge">Ready to transform?</div>
-    <h2 class="gg-cta-title">Your Best Workout Starts Here</h2>
-    <div class="gg-cta-subtitle">Join thousands of athletes training smarter with AI</div>
+    <h2 class="gg-cta-title">Ready to start?</h2>
+    <div class="gg-cta-subtitle">Your AI coach is waiting.</div>
   </div>
   <div class="gg-cta-right">
-    <a href="#login-card" class="gg-cta-btn">Start Your First Workout &rarr;</a>
-    <div class="gg-cta-note">No sign up required</div>
+    <a href="#login-card" class="gg-cta-btn">Start Training &rarr;</a>
   </div>
 </div>
 """, unsafe_allow_html=True)
