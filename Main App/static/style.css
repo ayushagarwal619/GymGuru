@@ -633,7 +633,7 @@ div[data-testid="stForm"] {
   border: 1px solid var(--border);
   border-radius: var(--radius) !important;
   padding: 2rem !important; /* Consistent padding */
-  margin-top: 56px !important; /* Precise Exercises -> Stats gap */
+  margin-top: 40px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 56px */
   width: 100% !important;
 }
 
