@@ -40,7 +40,7 @@ def _navbar() -> None:
       <a href="#about" class="gg-navbar-link">About</a>
     </div>
     <div class="gg-navbar-cta">
-      <a href="#login-card" class="gg-navbar-btn">Get Started &rarr;</a>
+      <a href="#login-card" class="gg-navbar-btn">Start Training</a>
     </div>
   </div>
 </header>

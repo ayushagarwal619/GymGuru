@@ -330,20 +330,22 @@ p, li, span, label {
 }
 
 .gg-navbar-btn {
-  background: var(--primary);
-  color: #fff;
-  border-radius: 9999px;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: var(--transition);
+  background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
+  color: #fff !important;
+  border-radius: 9999px !important;
+  padding: 0.6rem 1.5rem !important; /* Slightly larger, premium pad */
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  border: none !important;
+  transition: var(--t) !important;
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2) !important;
 }
 
 .gg-navbar-btn:hover {
-  background: var(--primary-hover);
-  transform: translateY(-1px);
+  background: linear-gradient(90deg, #5850e0 0%, #7c3aed 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 16px rgba(108, 99, 255, 0.3) !important;
 }
 
 /* =============================================================
