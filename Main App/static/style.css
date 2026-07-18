@@ -446,16 +446,16 @@ div[data-testid="stForm"] {
   background: var(--surface) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 3rem 2.5rem !important;
+  padding: 2.5rem 2rem !important; /* Clean app-style padding */
   width: 100% !important;
-  max-width: 540px !important;
-  margin: 0.75rem auto 0 !important; /* Moved Login Card much closer to the heading */
+  max-width: 510px !important; /* Centered 500px-520px card width */
+  margin: 1.5rem auto 0 !important;
   box-shadow: var(--shadow-lg) !important;
 }
 
 .gg-login-header {
   text-align: center;
-  margin-bottom: 1.25rem; /* Reduced margin */
+  margin-bottom: 1.5rem;
 }
 
 .gg-login-title {
@@ -463,17 +463,17 @@ div[data-testid="stForm"] {
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.03em;
-  margin-bottom: 0.25rem; /* Reduced margin */
+  margin-bottom: 0.35rem;
 }
 
 .gg-login-desc {
   font-size: 0.88rem;
   color: var(--text-dim);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .gg-login-footer {
-  margin-top: 1.75rem;
+  margin-top: 1.5rem;
   text-align: center;
 }
 
@@ -491,13 +491,13 @@ div[data-testid="stForm"] {
    ============================================================= */
 /* Vercel style inputs */
 .stTextInput > div > div > input {
-  background: rgba(9, 11, 18, 0.6) !important;
+  background: #0B0D12 !important;
   border: 1px solid var(--border) !important;
   border-radius: 8px !important;
-  color: var(--text) !important;
-  padding: 0.85rem 1.15rem !important; /* Visually stronger input */
+  color: #fff !important;
+  padding: 0.85rem 1.15rem !important;
   font-size: 1.05rem !important;
-  transition: var(--transition) !important;
+  transition: var(--t) !important;
 }
 
 .stTextInput > div > div > input:focus {
@@ -505,27 +505,35 @@ div[data-testid="stForm"] {
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2) !important;
 }
 
-/* Streamlit button selectors */
+/* Labeled input styling */
+label[data-testid="stWidgetLabel"] {
+  color: var(--text-dim) !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Streamlit button selectors - Gradient button */
 .stButton > button,
 [data-testid="stBaseButton-secondaryFormSubmit"] {
-  background: #FFFFFF !important;
-  color: #090B12 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
   border-radius: 8px !important;
-  font-weight: 700 !important; /* Bold, stronger button */
+  font-weight: 700 !important;
   font-size: 1.05rem !important;
   padding: 0.85rem 1.5rem !important;
-  height: auto !important;
+  height: 52px !important; /* 52px spec height */
   width: 100% !important;
-  transition: var(--transition) !important;
-  box-shadow: var(--shadow) !important;
+  transition: var(--t) !important;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2) !important;
 }
 
 .stButton > button:hover,
 [data-testid="stBaseButton-secondaryFormSubmit"]:hover {
-  background: #F1F5F9 !important;
+  background: linear-gradient(90deg, #5850e0 0%, #7c3aed 100%) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.15) !important;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3) !important;
 }
 
 .stButton > button:active,
