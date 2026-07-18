@@ -349,65 +349,94 @@ p, li, span, label {
 /* =============================================================
    06 Hero
    ============================================================= */
-.gg-hero {
-  text-align: center;
-  padding: 1rem 0 0.5rem; /* Compact padding */
-  max-width: 800px;
-  margin: 0 auto;
+.gg-hero-left {
+  text-align: left !important;
+  width: 100%;
 }
 
 .gg-hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(108, 99, 255, 0.08);
-  border: 1px solid rgba(108, 99, 255, 0.18);
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.2);
   border-radius: 9999px;
-  padding: 0.3rem 0.9rem;
+  padding: 0.35rem 0.9rem;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: var(--accent);
+  color: var(--primary);
   text-transform: uppercase;
-  margin-bottom: 0.75rem; /* Reduced margin */
+  margin-bottom: 1.25rem;
 }
 
 .gg-hero-title {
-  font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
+  font-size: 56px !important; /* 56px spec */
   font-weight: 900 !important;
-  line-height: 0.95 !important;
-  letter-spacing: -0.04em !important;
-  margin-bottom: 0.5rem !important; /* Reduced margin */
+  line-height: 1.0 !important;
+  letter-spacing: -0.045em !important;
+  margin-bottom: 0.75rem !important;
+  color: #fff !important;
 }
 
 .gg-hero-title span.title-gradient {
-  background: linear-gradient(135deg, #fff 40%, var(--primary) 70%, var(--accent) 100%);
+  background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gg-hero-subtitle {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 500;
   color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 0.25rem; /* Reduced margin */
+  margin-bottom: 2rem;
 }
 
-.gg-hero-tagline {
-  font-size: 1.35rem;
+.gg-hero-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.gg-benefit-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.gg-benefit-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(108, 99, 255, 0.1);
+  border: 1px solid rgba(108, 99, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.gg-benefit-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.gg-benefit-title {
+  font-size: 1.05rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 0.25rem; /* Reduced margin */
+  margin-bottom: 0.15rem;
 }
 
-.gg-hero-quote {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: var(--muted);
-  margin-top: 0.5rem; /* Reduced margin */
+.gg-benefit-desc {
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  line-height: 1.45;
 }
 
 /* =============================================================

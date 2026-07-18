@@ -47,17 +47,39 @@ def _navbar() -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Helper: Centered Hero ─────────────────────────────────────────────────────
-def _hero(quote: str) -> None:
-    st.markdown(f"""
-<div class="gg-hero">
+# ── Helper: Hero Column ───────────────────────────────────────────────────────
+def _hero() -> None:
+    st.markdown("""
+<div class="gg-hero-left">
   <div class="gg-hero-badge">
-    <span>🤖</span> AI &nbsp;·&nbsp; Real-Time Pose Detection &nbsp;·&nbsp; Voice Coach
+    <span>🤖</span> AI POWERED FITNESS COACH
   </div>
-  <div class="gg-hero-subtitle">AI Powered Real‑Time Personal Fitness Coach</div>
   <h1 class="gg-hero-title">Gym<span class="title-gradient">Guru</span></h1>
-  <div class="gg-hero-tagline">Train Smarter with AI</div>
-  <div class="gg-hero-quote">&ldquo;{quote}&rdquo;</div>
+  <div class="gg-hero-subtitle">Your AI Coach. Your Best Training Partner.</div>
+  
+  <div class="gg-hero-benefits">
+    <div class="gg-benefit-row">
+      <div class="gg-benefit-icon-wrap">🧍</div>
+      <div class="gg-benefit-content">
+        <div class="gg-benefit-title">Real-time Posture Correction</div>
+        <div class="gg-benefit-desc">33 MediaPipe landmarks analyze your every move and help you train with perfect form.</div>
+      </div>
+    </div>
+    <div class="gg-benefit-row">
+      <div class="gg-benefit-icon-wrap">🔊</div>
+      <div class="gg-benefit-content">
+        <div class="gg-benefit-title">AI Voice Coaching</div>
+        <div class="gg-benefit-desc">Groq-powered live voice feedback keeps you motivated and on track.</div>
+      </div>
+    </div>
+    <div class="gg-benefit-row">
+      <div class="gg-benefit-icon-wrap">📈</div>
+      <div class="gg-benefit-content">
+        <div class="gg-benefit-title">Automatic Workout Tracking</div>
+        <div class="gg-benefit-desc">Every rep, set and second is logged automatically. Track progress, stay consistent, get stronger.</div>
+      </div>
+    </div>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -244,38 +266,42 @@ def render_login_wall() -> bool:
     # 0 ── Navbar
     _navbar()
 
-    # 1 ── Full-bleed hero
-    _hero(quote)
+    # 1 ── Hero + Login Card columns (unified top section)
+    col1, col2 = st.columns([1.2, 1], gap="large")
 
-    # ── THE FORM — all keys preserved ────────────────────────────────────────
-    with st.form("login_form", clear_on_submit=False):
-        st.markdown("""
-        <div class="gg-login-header" id="login-card">
-          <div class="gg-login-title">👋 Welcome to GymGuru!</div>
-          <div class="gg-login-desc">
-            Pick a username and start training — your history is saved automatically.
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+    with col1:
+        _hero()
 
-        username = st.text_input(
-            "👤  Username",
-            placeholder="e.g. alexsmith",
-            help="Your workout history will be saved automatically.",
-        )
+    with col2:
+        # ── THE FORM — all keys preserved ────────────────────────────────────────
+        with st.form("login_form", clear_on_submit=False):
+            st.markdown("""
+            <div class="gg-login-header" id="login-card">
+              <div class="gg-login-title">👋 Welcome to GymGuru!</div>
+              <div class="gg-login-desc">
+                Enter your username to continue your fitness journey.
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
-        submit = st.form_submit_button(
-            "Start Training  &rarr;",
-            use_container_width=True,
-        )
+            username = st.text_input(
+                "👤  Username",
+                placeholder="e.g. alexsmith",
+                help="Your workout history will be saved automatically.",
+            )
 
-        st.markdown("""
-        <div class="gg-login-footer">
-          <div class="gg-privacy-note">
-            <span>🔒</span> Your workout data is stored locally and never shared.
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
+            submit = st.form_submit_button(
+                "Start Training  &rarr;",
+                use_container_width=True,
+            )
+
+            st.markdown("""
+            <div class="gg-login-footer">
+              <div class="gg-privacy-note">
+                <span>🔒</span> Your data is stored locally and stays private.
+              </div>
+            </div>
+            """, unsafe_allow_html=True)
 
     if submit:
         if not username.strip():
