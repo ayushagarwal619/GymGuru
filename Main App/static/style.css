@@ -508,7 +508,7 @@ div[data-testid="stForm"] {
    09 Features
    ============================================================= */
 #features {
-  margin-top: 64px !important; /* Precise Hero -> Features gap */
+  margin-top: 48px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 64px */
   width: 100% !important;
 }
 
@@ -578,7 +578,7 @@ div[data-testid="stForm"] {
    ============================================================= */
 .gg-exercises-section {
   text-align: left !important; /* Left aligned chips section */
-  margin-top: 56px !important; /* Precise Features -> Exercises gap */
+  margin-top: 40px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 56px */
   width: 100% !important;
 }
 
