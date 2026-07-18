@@ -382,7 +382,7 @@ p, li, span, label {
 }
 
 .gg-hero-title span.title-gradient {
-  background: linear-gradient(135deg, #fff 30%, var(--primary) 70%, var(--accent) 100%);
+  background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
