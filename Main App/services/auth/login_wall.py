@@ -81,25 +81,23 @@ def _features() -> None:
          "Real-time posture scoring catches back arch, knee collapse "
          "and swing errors the moment they happen."),
     ]
-    st.markdown("""
+    
+    cards_html = "".join(f"""
+    <div class="gg-feature-card">
+      <div class="gg-feature-icon">{icon}</div>
+      <div class="gg-feature-title">{title}</div>
+      <div class="gg-feature-desc">{desc}</div>
+    </div>
+""" for icon, title, desc in items)
+
+    st.markdown(f"""
 <div id="features">
   <div class="gg-features-heading">Built for Serious Athletes. Accessible to Everyone.</div>
   <div class="gg-features-sub">
     Four capabilities working simultaneously so you can focus on the lift, not the laptop.
   </div>
   <div class="gg-features-grid">
-""", unsafe_allow_html=True)
-
-    for icon, title, desc in items:
-        st.markdown(f"""
-    <div class="gg-feature-card">
-      <div class="gg-feature-icon">{icon}</div>
-      <div class="gg-feature-title">{title}</div>
-      <div class="gg-feature-desc">{desc}</div>
-    </div>
-""", unsafe_allow_html=True)
-
-    st.markdown("""
+    {cards_html}
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -191,7 +189,7 @@ def _footer() -> None:
         for i, n in techs
     )
     st.markdown(f"""
-<footer class="gg-footer">
+<div class="gg-footer">
   <div class="gg-footer-grid">
     <div class="gg-footer-col">
       <div class="gg-footer-logo-wrap">
@@ -222,7 +220,7 @@ def _footer() -> None:
     <div class="gg-footer-copy">&copy; 2024 GymGuru. All rights reserved.</div>
     <div class="gg-footer-heart">Built with <span>&hearts;</span> and AI</div>
   </div>
-</footer>
+</div>
 """, unsafe_allow_html=True)
 
 

@@ -1,5 +1,5 @@
 /* =============================================================
-   GYMGURU — Premium Design System (Redesign v3)
+   GYMGURU — Premium Design System (Redesign v3 - Refined)
    Clean, Apple/Linear/Vercel-inspired theme.
    ============================================================= */
 
@@ -25,6 +25,7 @@
   --shadow:       0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg:    0 10px 40px rgba(0, 0, 0, 0.6);
   --t:            0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* =============================================================
@@ -37,12 +38,15 @@
 .stApp {
   background: var(--bg) !important;
   color: var(--text) !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family: var(--font-sans) !important;
   -webkit-font-smoothing: antialiased !important;
 }
 
-#MainMenu, footer, header {
-  visibility: hidden !important;
+/* Hide Streamlit native chrome elements specifically by test-id to avoid styling side-effects */
+#MainMenu, 
+[data-testid="stHeader"], 
+[data-testid="stFooter"] {
+  display: none !important;
 }
 .stDeployButton {
   display: none !important;
@@ -68,15 +72,16 @@ p, li, span, label {
    04 Layout
    ============================================================= */
 .block-container {
-  padding: 0 2.5rem 5rem !important;
-  max-width: 1200px !important; /* restrained for Dashboard */
+  padding: 0 5% 4rem !important; /* Leaves 5% padding on each side, scaling content to occupy 90% */
+  max-width: 1350px !important;
+  margin: 0 auto !important;
   position: relative;
   z-index: 1;
 }
 
 @media (max-width: 768px) {
   .block-container {
-    padding: 0 1rem 3rem !important;
+    padding: 0 1.5rem 3rem !important;
   }
 }
 
@@ -271,17 +276,16 @@ p, li, span, label {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding: 1rem 0;
-  margin-bottom: 3rem;
+  padding: 0.75rem 0; /* Reduced padding for visual density */
+  margin-bottom: 1rem; /* Pulled closer to hero */
 }
 
 .gg-navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 1.5rem;
 }
 
 .gg-navbar-brand {
@@ -347,7 +351,7 @@ p, li, span, label {
    ============================================================= */
 .gg-hero {
   text-align: center;
-  padding: 4rem 0 3rem;
+  padding: 1.25rem 0; /* Reduced padding (approx 35% reduction overall) */
   max-width: 800px;
   margin: 0 auto;
 }
@@ -356,24 +360,24 @@ p, li, span, label {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(108, 99, 255, 0.1);
-  border: 1px solid rgba(108, 99, 255, 0.2);
+  background: rgba(108, 99, 255, 0.08);
+  border: 1px solid rgba(108, 99, 255, 0.18);
   border-radius: 9999px;
-  padding: 0.35rem 1rem;
-  font-size: 0.75rem;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--accent);
   text-transform: uppercase;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .gg-hero-title {
-  font-size: clamp(3rem, 7vw, 5.5rem) !important;
+  font-size: clamp(2.5rem, 6vw, 4.5rem) !important; /* Moderated title size */
   font-weight: 900 !important;
   line-height: 0.95 !important;
   letter-spacing: -0.04em !important;
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
 }
 
 .gg-hero-title span.title-gradient {
@@ -384,26 +388,26 @@ p, li, span, label {
 }
 
 .gg-hero-subtitle {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 500;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .gg-hero-tagline {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .gg-hero-quote {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   font-style: italic;
   color: var(--muted);
-  margin-top: 1.5rem;
+  margin-top: 0.75rem;
 }
 
 /* =============================================================
@@ -413,15 +417,16 @@ div[data-testid="stForm"] {
   background: var(--surface) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 3rem 2.5rem !important;
-  max-width: 480px !important;
-  margin: 3rem auto !important;
+  padding: 3rem 2.5rem !important; /* Balanced padding inside the card */
+  width: 100% !important;
+  max-width: 540px !important; /* Perfect desktop width between 520px-560px */
+  margin: 1rem auto 0 !important; /* Move card much closer to the hero */
   box-shadow: var(--shadow-lg) !important;
 }
 
 .gg-login-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
 }
 
 .gg-login-title {
@@ -439,7 +444,7 @@ div[data-testid="stForm"] {
 }
 
 .gg-login-footer {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
   text-align: center;
 }
 
@@ -461,8 +466,8 @@ div[data-testid="stForm"] {
   border: 1px solid var(--border) !important;
   border-radius: 8px !important;
   color: var(--text) !important;
-  padding: 0.75rem 1rem !important;
-  font-size: 0.95rem !important;
+  padding: 0.85rem 1.15rem !important; /* Visually stronger input */
+  font-size: 1.05rem !important;
   transition: var(--transition) !important;
 }
 
@@ -478,9 +483,9 @@ div[data-testid="stForm"] {
   color: #090B12 !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 8px !important;
-  font-weight: 600 !important;
-  font-size: 0.95rem !important;
-  padding: 0.75rem 1.5rem !important;
+  font-weight: 700 !important; /* Bold, stronger button */
+  font-size: 1.05rem !important;
+  padding: 0.85rem 1.5rem !important;
   height: auto !important;
   width: 100% !important;
   transition: var(--transition) !important;
@@ -491,7 +496,7 @@ div[data-testid="stForm"] {
 [data-testid="stBaseButton-secondaryFormSubmit"]:hover {
   background: #F1F5F9 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.1) !important;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.15) !important;
 }
 
 .stButton > button:active,
@@ -502,37 +507,40 @@ div[data-testid="stForm"] {
 /* =============================================================
    09 Features
    ============================================================= */
+#features {
+  margin-top: 64px !important; /* Precise Hero -> Features gap */
+  width: 100% !important;
+}
+
 .gg-features-heading {
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 800;
-  text-align: center;
+  text-align: left !important; /* Perfect left alignment */
   color: #fff;
   letter-spacing: -0.04em;
-  margin-top: 5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem !important;
 }
 
 .gg-features-sub {
   font-size: 1rem;
   color: var(--text-dim);
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 3.5rem;
+  text-align: left !important; /* Perfect left alignment */
+  max-width: 800px;
+  margin: 0 0 2.5rem 0 !important;
   line-height: 1.6;
 }
 
 .gg-features-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr) !important; /* Fixed stacking: always 4 columns on desktop */
   gap: 1.5rem;
-  margin-bottom: 5rem;
 }
 
 .gg-feature-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem 1.75rem;
+  border-radius: var(--radius) !important; /* Matching design system radius */
+  padding: 2rem !important; /* Matching design system card padding */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -569,8 +577,9 @@ div[data-testid="stForm"] {
    10 Exercise Chips
    ============================================================= */
 .gg-exercises-section {
-  text-align: center;
-  margin-bottom: 5rem;
+  text-align: left !important; /* Left aligned chips section */
+  margin-top: 56px !important; /* Precise Features -> Exercises gap */
+  width: 100% !important;
 }
 
 .gg-exercises-label {
@@ -579,12 +588,12 @@ div[data-testid="stForm"] {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--muted);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .gg-exercises-grid {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Align left with layout */
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -622,14 +631,16 @@ div[data-testid="stForm"] {
 .gg-stats-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.5rem 2rem;
-  margin-bottom: 5rem;
+  border-radius: var(--radius) !important;
+  padding: 2rem !important; /* Consistent padding */
+  margin-top: 56px !important; /* Precise Exercises -> Stats gap */
+  width: 100% !important;
 }
 
 .gg-stats-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  align-items: center;
 }
 
 .gg-stat-col {
@@ -652,7 +663,7 @@ div[data-testid="stForm"] {
 
 .gg-stat-icon {
   font-size: 1.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem; /* Reduced for visual density */
 }
 
 .gg-stat-value {
@@ -677,14 +688,15 @@ div[data-testid="stForm"] {
    ============================================================= */
 .gg-cta-banner {
   background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #C084FC 100%);
-  border-radius: var(--radius);
-  padding: 4rem 3.5rem;
+  border-radius: var(--radius) !important;
+  padding: 3rem !important; /* Visually balanced padding */
+  margin-top: 64px !important; /* Precise Stats -> CTA gap */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5rem;
   position: relative;
   overflow: hidden;
+  width: 100% !important;
 }
 
 .gg-cta-banner::before {
@@ -706,11 +718,11 @@ div[data-testid="stForm"] {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .gg-cta-title {
-  font-size: 2.25rem !important;
+  font-size: 2rem !important;
   font-weight: 800 !important;
   color: #fff !important;
   letter-spacing: -0.03em !important;
@@ -718,7 +730,7 @@ div[data-testid="stForm"] {
 }
 
 .gg-cta-subtitle {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.5;
 }
@@ -727,7 +739,7 @@ div[data-testid="stForm"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   z-index: 1;
 }
 
@@ -758,21 +770,22 @@ div[data-testid="stForm"] {
    ============================================================= */
 .gg-footer {
   border-top: 1px solid var(--border);
-  padding: 5rem 0 2rem;
-  margin-top: 5rem;
+  padding: 3.5rem 0 2rem; /* Reduced padding */
+  margin-top: 56px !important; /* Precise CTA -> Footer gap */
+  width: 100% !important;
 }
 
 .gg-footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 4rem;
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
 }
 
 .gg-footer-col {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .gg-footer-logo-wrap {
@@ -873,7 +886,7 @@ div[data-testid="stForm"] {
    ============================================================= */
 @media (max-width: 1024px) {
   .gg-features-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) !important;
   }
   .gg-stats-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -893,10 +906,14 @@ div[data-testid="stForm"] {
 
 @media (max-width: 768px) {
   .gg-navbar-menu {
-    display: none; /* simple stack/hide menu for mobile */
+    display: none;
   }
   .gg-hero {
-    padding: 3rem 0 2rem;
+    padding: 2rem 0;
+  }
+  div[data-testid="stForm"] {
+    max-width: 100% !important;
+    padding: 2rem 1.5rem !important;
   }
   .gg-stats-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -908,7 +925,7 @@ div[data-testid="stForm"] {
     flex-direction: column;
     text-align: center;
     gap: 2rem;
-    padding: 3rem 2rem;
+    padding: 3rem 2rem !important;
   }
   .gg-cta-left {
     max-width: 100%;
@@ -929,13 +946,10 @@ div[data-testid="stForm"] {
 
 @media (max-width: 480px) {
   .gg-features-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
   .gg-stats-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-  }
-  div[data-testid="stForm"] {
-    padding: 2rem 1.5rem !important;
   }
 }
