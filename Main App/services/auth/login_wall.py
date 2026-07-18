@@ -35,7 +35,7 @@ def _navbar() -> None:
       <span class="gg-navbar-title">GymGuru</span>
     </a>
     <div class="gg-navbar-menu">
-      <a href="#features" class="gg-navbar-link">Features</a>
+      <a href="#features" class="gg-navbar-link active">Features</a>
       <a href="#how-it-works" class="gg-navbar-link">How It Works</a>
       <a href="#about" class="gg-navbar-link">About</a>
     </div>

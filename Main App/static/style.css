@@ -336,6 +336,22 @@ p, li, span, label {
   color: #fff;
 }
 
+.gg-navbar-link.active {
+  color: #fff !important;
+  position: relative;
+}
+
+.gg-navbar-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary) !important;
+  border-radius: 2px;
+}
+
 .gg-navbar-cta {
   display: flex;
   align-items: center;
