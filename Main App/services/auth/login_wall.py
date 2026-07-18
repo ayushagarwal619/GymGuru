@@ -121,11 +121,14 @@ def _features() -> None:
 # ── Helper: exercise list ─────────────────────────────────────────────────────
 def _exercises() -> None:
     items = [
-        ("🦵", "Squats"),
-        ("💪", "Push-ups"),
-        ("🏋️", "Biceps Curls"),
+        ("🏋️", "Squats"),
+        ("🏃", "Push-ups"),
+        ("🧗", "Pull-ups"),
+        ("🏋️", "Deadlifts"),
+        ("💪", "Bench Press"),
         ("🙌", "Shoulder Press"),
         ("🚶", "Lunges"),
+        ("🧘", "Plank"),
     ]
     cards = "".join(
         f'<div class="gg-exercise-chip">'
@@ -136,7 +139,7 @@ def _exercises() -> None:
     )
     st.markdown(f"""
 <div class="gg-exercises-section" id="how-it-works">
-  <div class="gg-exercises-label">AI-Tracked Exercises</div>
+  <div class="gg-exercises-label">Popular Exercises</div>
   <div class="gg-exercises-grid">{cards}</div>
 </div>
 """, unsafe_allow_html=True)
