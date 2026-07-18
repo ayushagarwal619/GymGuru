@@ -351,7 +351,7 @@ p, li, span, label {
    ============================================================= */
 .gg-hero {
   text-align: center;
-  padding: 1.25rem 0; /* Reduced padding (approx 35% reduction overall) */
+  padding: 1rem 0 0.5rem; /* Compact padding */
   max-width: 800px;
   margin: 0 auto;
 }
@@ -369,15 +369,15 @@ p, li, span, label {
   letter-spacing: 0.08em;
   color: var(--accent);
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem; /* Reduced margin */
 }
 
 .gg-hero-title {
-  font-size: clamp(2.5rem, 6vw, 4.5rem) !important; /* Moderated title size */
+  font-size: clamp(2.5rem, 6vw, 4.5rem) !important;
   font-weight: 900 !important;
   line-height: 0.95 !important;
   letter-spacing: -0.04em !important;
-  margin-bottom: 0.75rem !important;
+  margin-bottom: 0.5rem !important; /* Reduced margin */
 }
 
 .gg-hero-title span.title-gradient {
@@ -393,21 +393,21 @@ p, li, span, label {
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem; /* Reduced margin */
 }
 
 .gg-hero-tagline {
   font-size: 1.35rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem; /* Reduced margin */
 }
 
 .gg-hero-quote {
   font-size: 0.85rem;
   font-style: italic;
   color: var(--muted);
-  margin-top: 0.75rem;
+  margin-top: 0.5rem; /* Reduced margin */
 }
 
 /* =============================================================
@@ -417,16 +417,16 @@ div[data-testid="stForm"] {
   background: var(--surface) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 3rem 2.5rem !important; /* Balanced padding inside the card */
+  padding: 3rem 2.5rem !important;
   width: 100% !important;
-  max-width: 540px !important; /* Perfect desktop width between 520px-560px */
-  margin: 1rem auto 0 !important; /* Move card much closer to the hero */
+  max-width: 540px !important;
+  margin: 0.75rem auto 0 !important; /* Moved Login Card much closer to the heading */
   box-shadow: var(--shadow-lg) !important;
 }
 
 .gg-login-header {
   text-align: center;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem; /* Reduced margin */
 }
 
 .gg-login-title {
@@ -434,7 +434,7 @@ div[data-testid="stForm"] {
   font-weight: 800;
   color: #fff;
   letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem; /* Reduced margin */
 }
 
 .gg-login-desc {
