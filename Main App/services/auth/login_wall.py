@@ -155,24 +155,24 @@ def _stats() -> None:
       <div class="gg-stat-label">Pose Landmarks</div>
     </div>
     <div class="gg-stat-col">
-      <div class="gg-stat-icon">🏋️</div>
-      <div class="gg-stat-value">5</div>
-      <div class="gg-stat-label">Exercises</div>
-    </div>
-    <div class="gg-stat-col">
       <div class="gg-stat-icon">⚡</div>
+      <div class="gg-stat-value">5</div>
+      <div class="gg-stat-label">AI Models</div>
+    </div>
+    <div class="gg-stat-col">
+      <div class="gg-stat-icon">⏱️</div>
       <div class="gg-stat-value">&lt;1s</div>
-      <div class="gg-stat-label">Feedback</div>
+      <div class="gg-stat-label">Response Time</div>
     </div>
     <div class="gg-stat-col">
-      <div class="gg-stat-icon">🔊</div>
+      <div class="gg-stat-icon">🧠</div>
       <div class="gg-stat-value">AI Coach</div>
-      <div class="gg-stat-label">Voice Feedback</div>
+      <div class="gg-stat-label">Powered by Groq</div>
     </div>
     <div class="gg-stat-col">
-      <div class="gg-stat-icon">📅</div>
+      <div class="gg-stat-icon">🗄️</div>
       <div class="gg-stat-value">∞</div>
-      <div class="gg-stat-label">Sessions</div>
+      <div class="gg-stat-label">Possibilities</div>
     </div>
   </div>
 </div>
