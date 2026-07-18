@@ -100,22 +100,9 @@ def _features() -> None:
          "Detect common mistakes instantly and train safely with real-time form corrections."),
     ]
     
-    cards_html = "".join(f"""
-    <div class="gg-feature-card">
-      <div class="gg-feature-icon">{icon}</div>
-      <div class="gg-feature-title">{title}</div>
-      <div class="gg-feature-desc">{desc}</div>
-    </div>
-""" for icon, title, desc in items)
+    cards_html = "".join(f'<div class="gg-feature-card"><div class="gg-feature-icon">{icon}</div><div class="gg-feature-title">{title}</div><div class="gg-feature-desc">{desc}</div></div>' for icon, title, desc in items)
 
-    st.markdown(f"""
-<div id="features">
-  <div class="gg-features-heading">Why GymGuru?</div>
-  <div class="gg-features-grid">
-    {cards_html}
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(f'<div id="features"><div class="gg-features-heading">Why GymGuru?</div><div class="gg-features-grid">{cards_html}</div></div>', unsafe_allow_html=True)
 
 
 # ── Helper: exercise list ─────────────────────────────────────────────────────
@@ -137,90 +124,21 @@ def _exercises() -> None:
         f'</div>'
         for e, n in items
     )
-    st.markdown(f"""
-<div class="gg-exercises-section" id="how-it-works">
-  <div class="gg-exercises-label">Popular Exercises</div>
-  <div class="gg-exercises-grid">{cards}</div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(f'<div class="gg-exercises-section" id="how-it-works"><div class="gg-exercises-label">Popular Exercises</div><div class="gg-exercises-grid">{cards}</div></div>', unsafe_allow_html=True)
 
 
 def _stats() -> None:
-    st.markdown("""
-<div class="gg-stats-card" id="about">
-  <div class="gg-stats-grid">
-    <div class="gg-stat-col">
-      <div class="gg-stat-icon">🏃</div>
-      <div class="gg-stat-value">33</div>
-      <div class="gg-stat-label">Pose Landmarks</div>
-    </div>
-    <div class="gg-stat-col">
-      <div class="gg-stat-icon">⚡</div>
-      <div class="gg-stat-value">5</div>
-      <div class="gg-stat-label">AI Models</div>
-    </div>
-    <div class="gg-stat-col">
-      <div class="gg-stat-icon">⏱️</div>
-      <div class="gg-stat-value">&lt;1s</div>
-      <div class="gg-stat-label">Response Time</div>
-    </div>
-    <div class="gg-stat-col">
-      <div class="gg-stat-icon">🧠</div>
-      <div class="gg-stat-value">AI Coach</div>
-      <div class="gg-stat-label">Powered by Groq</div>
-    </div>
-    <div class="gg-stat-col">
-      <div class="gg-stat-icon">🗄️</div>
-      <div class="gg-stat-value">∞</div>
-      <div class="gg-stat-label">Possibilities</div>
-    </div>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown('<div class="gg-stats-card" id="about"><div class="gg-stats-grid"><div class="gg-stat-col"><div class="gg-stat-icon">🏃</div><div class="gg-stat-value">33</div><div class="gg-stat-label">Pose Landmarks</div></div><div class="gg-stat-col"><div class="gg-stat-icon">⚡</div><div class="gg-stat-value">5</div><div class="gg-stat-label">AI Models</div></div><div class="gg-stat-col"><div class="gg-stat-icon">⏱️</div><div class="gg-stat-value">&lt;1s</div><div class="gg-stat-label">Response Time</div></div><div class="gg-stat-col"><div class="gg-stat-icon">🧠</div><div class="gg-stat-value">AI Coach</div><div class="gg-stat-label">Powered by Groq</div></div><div class="gg-stat-col"><div class="gg-stat-icon">🗄️</div><div class="gg-stat-value">∞</div><div class="gg-stat-label">Possibilities</div></div></div></div>', unsafe_allow_html=True)
 
 
 # ── Helper: CTA Banner ────────────────────────────────────────────────────────
 def _cta() -> None:
-    st.markdown("""
-<div class="gg-cta-banner">
-  <div class="gg-cta-left">
-    <h2 class="gg-cta-title">Ready to start?</h2>
-    <div class="gg-cta-subtitle">Your AI coach is waiting.</div>
-  </div>
-  <div class="gg-cta-right">
-    <a href="#login-card" class="gg-cta-btn">Start Training &rarr;</a>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown('<div class="gg-cta-banner"><div class="gg-cta-left"><h2 class="gg-cta-title">Ready to start?</h2><div class="gg-cta-subtitle">Your AI coach is waiting.</div></div><div class="gg-cta-right"><a href="#login-card" class="gg-cta-btn">Start Training &rarr;</a></div></div>', unsafe_allow_html=True)
 
 
 # ── Helper: footer ────────────────────────────────────────────────────────────
 def _footer() -> None:
-    st.markdown("""
-<div class="gg-footer">
-  <div class="gg-footer-grid">
-    <div class="gg-footer-col">
-      <div class="gg-footer-logo-wrap">
-        <span class="gg-footer-logo">🏋️</span>
-        <span class="gg-footer-brand">GymGuru</span>
-      </div>
-      <div class="gg-footer-desc">AI Powered Fitness Coach</div>
-    </div>
-    <div class="gg-footer-col gg-footer-center">
-      <div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div>
-    </div>
-    <div class="gg-footer-col gg-footer-right">
-      <div class="gg-footer-links">
-        <a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a>
-        <span class="gg-footer-sep">|</span>
-        <a href="#" class="gg-footer-link">Privacy</a>
-        <span class="gg-footer-sep">|</span>
-        <a href="#" class="gg-footer-link">Terms</a>
-      </div>
-    </div>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown('<div class="gg-footer"><div class="gg-footer-grid"><div class="gg-footer-col"><div class="gg-footer-logo-wrap"><span class="gg-footer-logo">🏋️</span><span class="gg-footer-brand">GymGuru</span></div><div class="gg-footer-desc">AI Powered Fitness Coach</div></div><div class="gg-footer-col gg-footer-center"><div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div></div><div class="gg-footer-col gg-footer-right"><div class="gg-footer-links"><a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Privacy</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Terms</a></div></div></div></div>', unsafe_allow_html=True)
 
 
 # ── Public entry-point (called by main.py) ────────────────────────────────────
@@ -239,6 +157,20 @@ def render_login_wall() -> bool:
         return True
 
     quote = random.choice(_QUOTES)
+
+    # Inject dark athlete background only on the login wall
+    st.markdown("""
+    <style>
+    .stApp {
+        background-image: linear-gradient(180deg, rgba(11, 13, 18, 0.93) 0%, rgba(19, 23, 34, 0.86) 50%, rgba(11, 13, 18, 0.95) 100%), 
+                          url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
     # 0 ── Navbar
     _navbar()
@@ -263,12 +195,12 @@ def render_login_wall() -> bool:
 
             username = st.text_input(
                 "👤  Username",
-                placeholder="e.g. alexsmith",
+                placeholder="Enter your username",
                 help="Your workout history will be saved automatically.",
             )
 
             submit = st.form_submit_button(
-                "Start Training  &rarr;",
+                "Start Training  →",
                 use_container_width=True,
             )
 

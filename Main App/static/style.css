@@ -717,9 +717,10 @@ label[data-testid="stWidgetLabel"] {
    12 CTA
    ============================================================= */
 .gg-cta-banner {
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #C084FC 100%);
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
   border-radius: var(--radius) !important;
-  padding: 1.75rem 2.5rem !important; /* Extremely compact premium padding */
+  padding: 1.5rem 2rem !important; /* Premium compact padding */
   margin-top: 24px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 40px */
   display: flex;
   justify-content: space-between;
@@ -729,21 +730,13 @@ label[data-testid="stWidgetLabel"] {
   width: 100% !important;
 }
 
-.gg-cta-banner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 60%);
-  pointer-events: none;
-}
-
 .gg-cta-left {
   max-width: 60%;
   z-index: 1;
 }
 
 .gg-cta-title {
-  font-size: 30px !important; /* Section Title 30px spec */
+  font-size: 30px !important;
   font-weight: 800 !important;
   color: #fff !important;
   letter-spacing: -0.03em !important;
@@ -751,8 +744,8 @@ label[data-testid="stWidgetLabel"] {
 }
 
 .gg-cta-subtitle {
-  font-size: 16px !important; /* Body 16px spec */
-  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 16px !important;
+  color: var(--text-dim) !important;
   line-height: 1.4;
 }
 
@@ -765,20 +758,22 @@ label[data-testid="stWidgetLabel"] {
 }
 
 .gg-cta-btn {
-  background: #FFFFFF;
-  color: #4F46E5;
-  border-radius: 9999px;
-  padding: 0.75rem 2rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: var(--transition);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 0.75rem 2rem !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: var(--t) !important;
+  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2) !important;
 }
 
 .gg-cta-btn:hover {
-  background: #F8FAFC;
-  transform: translateY(-1px);
+  background: linear-gradient(90deg, #5850e0 0%, #7c3aed 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3) !important;
 }
 
 .gg-cta-note {
