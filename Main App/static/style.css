@@ -509,14 +509,19 @@ div[data-testid="stForm"] {
   border: 1px solid var(--border) !important;
   border-radius: 8px !important;
   color: #fff !important;
-  padding: 0.85rem 1.15rem !important;
+  padding: 0.85rem 1.15rem 0.85rem 2.75rem !important; /* Spacing for the prefix icon */
   font-size: 1.05rem !important;
   transition: var(--t) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/%3E%3C/svg%3E") !important;
+  background-size: 20px 20px !important;
+  background-position: 14px center !important;
+  background-repeat: no-repeat !important;
 }
 
 .stTextInput > div > div > input:focus {
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236C63FF' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/%3E%3C/svg%3E") !important;
 }
 
 /* Labeled input styling */
@@ -596,9 +601,17 @@ label[data-testid="stWidgetLabel"] {
 }
 
 .gg-feature-icon {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-  color: var(--primary);
+  width: 48px !important;
+  height: 48px !important;
+  background: rgba(108, 99, 255, 0.1) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.35rem !important;
+  margin-bottom: 1.25rem !important;
+  color: var(--primary) !important;
+  border: 1px solid rgba(108, 99, 255, 0.2) !important;
 }
 
 .gg-feature-title {
@@ -771,8 +784,8 @@ label[data-testid="stWidgetLabel"] {
 }
 
 .gg-cta-btn {
-  background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
-  color: #FFFFFF !important;
+  background: #FFFFFF !important;
+  color: #6C63FF !important;
   border: none !important;
   border-radius: 9999px !important;
   padding: 0.75rem 2rem !important;
@@ -780,13 +793,13 @@ label[data-testid="stWidgetLabel"] {
   font-weight: 700 !important;
   text-decoration: none !important;
   transition: var(--t) !important;
-  box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 .gg-cta-btn:hover {
-  background: linear-gradient(90deg, #5850e0 0%, #7c3aed 100%) !important;
+  background: #F3F4F6 !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
 .gg-cta-note {

@@ -194,7 +194,7 @@ def render_login_wall() -> bool:
             """, unsafe_allow_html=True)
 
             username = st.text_input(
-                "👤  Username",
+                "Username",
                 placeholder="Enter your username",
                 help="Your workout history will be saved automatically.",
             )
