@@ -545,43 +545,34 @@ label[data-testid="stWidgetLabel"] {
    09 Features
    ============================================================= */
 #features {
-  margin-top: 48px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 64px */
+  margin-top: 24px !important; /* Compounded with Streamlit's 1rem (16px) gap to form 40px */
   width: 100% !important;
 }
 
 .gg-features-heading {
-  font-size: 2rem;
+  font-size: 30px !important; /* Section Title 30px Bold spec */
   font-weight: 800;
-  text-align: left !important; /* Perfect left alignment */
+  text-align: left !important;
   color: #fff;
   letter-spacing: -0.04em;
-  margin-bottom: 0.5rem !important;
-}
-
-.gg-features-sub {
-  font-size: 1rem;
-  color: var(--text-dim);
-  text-align: left !important; /* Perfect left alignment */
-  max-width: 800px;
-  margin: 0 0 2.5rem 0 !important;
-  line-height: 1.6;
+  margin-bottom: 1.5rem !important;
 }
 
 .gg-features-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) !important; /* Fixed stacking: always 4 columns on desktop */
+  grid-template-columns: repeat(4, 1fr) !important;
   gap: 1.5rem;
 }
 
 .gg-feature-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius) !important; /* Matching design system radius */
-  padding: 2rem !important; /* Matching design system card padding */
+  border-radius: var(--radius) !important;
+  padding: 1.5rem !important; /* 24px padding spec */
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: var(--transition);
+  transition: var(--t);
 }
 
 .gg-feature-card:hover {
@@ -592,15 +583,15 @@ label[data-testid="stWidgetLabel"] {
 
 .gg-feature-icon {
   font-size: 1.75rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   color: var(--primary);
 }
 
 .gg-feature-title {
-  font-size: 1.05rem;
+  font-size: 20px !important; /* Card Title 20px spec */
   font-weight: 700;
   color: #fff;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   letter-spacing: -0.01em;
 }
 
