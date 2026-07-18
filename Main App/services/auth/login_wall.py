@@ -196,15 +196,7 @@ def _cta() -> None:
 
 # ── Helper: footer ────────────────────────────────────────────────────────────
 def _footer() -> None:
-    techs = [
-        ("🐍", "Python"), ("🖐", "MediaPipe"), ("📷", "OpenCV"),
-        ("🤖", "Groq"), ("🗄", "SQLite"), ("⚡", "Streamlit"),
-    ]
-    chips = "".join(
-        f'<div class="gg-tech-chip"><span>{i}</span>{n}</div>'
-        for i, n in techs
-    )
-    st.markdown(f"""
+    st.markdown("""
 <div class="gg-footer">
   <div class="gg-footer-grid">
     <div class="gg-footer-col">
@@ -212,29 +204,20 @@ def _footer() -> None:
         <span class="gg-footer-logo">🏋️</span>
         <span class="gg-footer-brand">GymGuru</span>
       </div>
-      <div class="gg-footer-desc">
-        AI Powered Real-Time Personal Fitness Coach that helps you train smarter, safer, and stronger every day.
+      <div class="gg-footer-desc">AI Powered Fitness Coach</div>
+    </div>
+    <div class="gg-footer-col gg-footer-center">
+      <div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div>
+    </div>
+    <div class="gg-footer-col gg-footer-right">
+      <div class="gg-footer-links">
+        <a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a>
+        <span class="gg-footer-sep">|</span>
+        <a href="#" class="gg-footer-link">Privacy</a>
+        <span class="gg-footer-sep">|</span>
+        <a href="#" class="gg-footer-link">Terms</a>
       </div>
     </div>
-    <div class="gg-footer-col">
-      <div class="gg-footer-title">Quick Links</div>
-      <a href="#features" class="gg-footer-link">Features</a>
-      <a href="#how-it-works" class="gg-footer-link">How It Works</a>
-      <a href="#about" class="gg-footer-link">About</a>
-    </div>
-    <div class="gg-footer-col">
-      <div class="gg-footer-title">Connect</div>
-      <a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a>
-      <a href="#" class="gg-footer-link">Documentation</a>
-      <a href="#" class="gg-footer-link">Support</a>
-    </div>
-  </div>
-  <div class="gg-tech-row">
-    {chips}
-  </div>
-  <div class="gg-footer-bottom">
-    <div class="gg-footer-copy">&copy; 2024 GymGuru. All rights reserved.</div>
-    <div class="gg-footer-heart">Built with <span>&hearts;</span> and AI</div>
   </div>
 </div>
 """, unsafe_allow_html=True)
