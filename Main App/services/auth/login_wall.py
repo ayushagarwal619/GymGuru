@@ -31,7 +31,7 @@ def _navbar() -> None:
 <header class="gg-navbar">
   <div class="gg-navbar-container">
     <a href="#" class="gg-navbar-brand">
-      <img src="/static/logo.jpg" class="gg-navbar-logo-img" alt="GymGuru Logo">
+      <img src="/app/static/logo.jpg" class="gg-navbar-logo-img" alt="GymGuru Logo">
       <span class="gg-navbar-title">GymGuru</span>
     </a>
     <div class="gg-navbar-menu">
@@ -138,7 +138,7 @@ def _cta() -> None:
 
 # ── Helper: footer ────────────────────────────────────────────────────────────
 def _footer() -> None:
-    st.markdown('<div class="gg-footer"><div class="gg-footer-grid"><div class="gg-footer-col"><div class="gg-footer-logo-wrap"><img src="/static/logo.jpg" class="gg-footer-logo-img" alt="GymGuru Logo"><span class="gg-footer-brand">GymGuru</span></div><div class="gg-footer-desc">AI Powered Fitness Coach</div></div><div class="gg-footer-col gg-footer-center"><div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div></div><div class="gg-footer-col gg-footer-right"><div class="gg-footer-links"><a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Privacy</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Terms</a></div></div></div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="gg-footer"><div class="gg-footer-grid"><div class="gg-footer-col"><div class="gg-footer-logo-wrap"><img src="/app/static/logo.jpg" class="gg-footer-logo-img" alt="GymGuru Logo"><span class="gg-footer-brand">GymGuru</span></div><div class="gg-footer-desc">AI Powered Fitness Coach</div></div><div class="gg-footer-col gg-footer-center"><div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div></div><div class="gg-footer-col gg-footer-right"><div class="gg-footer-links"><a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Privacy</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Terms</a></div></div></div></div>', unsafe_allow_html=True)
 
 
 # ── Public entry-point (called by main.py) ────────────────────────────────────
