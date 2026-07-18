@@ -241,15 +241,6 @@ def render_login_wall() -> bool:
 
     quote = random.choice(_QUOTES)
 
-    # ── Custom CSS for wide container on login wall ──
-    st.markdown("""
-    <style>
-    .block-container {
-        max-width: 1280px !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     # 0 ── Navbar
     _navbar()
 
