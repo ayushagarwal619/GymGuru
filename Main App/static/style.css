@@ -7,24 +7,24 @@
    01 Variables
    ============================================================= */
 :root {
-  --bg:           #090B12;
-  --surface:      #141824;
+  --bg:           #0B0D12;
+  --surface:      #131722;
   --surface-hover:#1c2132;
   --primary:      #6C63FF;
   --primary-hover:#5850e0;
-  --accent:       #4DA3FF;
+  --accent:       #8B5CF6;
   --success:      #22C55E;
-  --border:       rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.16);
-  --text:         #FFFFFF;
-  --text-dim:     #94A3B8;
-  --muted:        #475569;
+  --border:       #2A2F3C;
+  --border-hover: #3d4456;
+  --text:         #E5E7EB;
+  --text-dim:     #9CA3AF;
+  --muted:        #64748B;
   --radius:       16px;
   --radius-sm:    10px;
   --radius-lg:    24px;
   --shadow:       0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg:    0 10px 40px rgba(0, 0, 0, 0.6);
-  --t:            0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --t:            200ms cubic-bezier(0.4, 0, 0.2, 1);
   --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
