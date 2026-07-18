@@ -31,7 +31,7 @@ def _navbar() -> None:
 <header class="gg-navbar">
   <div class="gg-navbar-container">
     <a href="#" class="gg-navbar-brand">
-      <span class="gg-navbar-logo">🏋️</span>
+      <img src="/static/logo.png" class="gg-navbar-logo-img" alt="GymGuru Logo">
       <span class="gg-navbar-title">GymGuru</span>
     </a>
     <div class="gg-navbar-menu">
@@ -133,12 +133,12 @@ def _stats() -> None:
 
 # ── Helper: CTA Banner ────────────────────────────────────────────────────────
 def _cta() -> None:
-    st.markdown('<div class="gg-cta-banner"><div class="gg-cta-left"><h2 class="gg-cta-title">Ready to start?</h2><div class="gg-cta-subtitle">Your AI coach is waiting.</div></div><div class="gg-cta-right"><a href="#login-card" class="gg-cta-btn">Start Training &rarr;</a></div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="gg-cta-banner"><div class="gg-cta-left"><h2 class="gg-cta-title">Ready to start?</h2><div class="gg-cta-subtitle">Your AI coach is waiting.</div></div><div class="gg-cta-right"><a href="#login-card" class="gg-cta-btn">Start Training →</a></div></div>', unsafe_allow_html=True)
 
 
 # ── Helper: footer ────────────────────────────────────────────────────────────
 def _footer() -> None:
-    st.markdown('<div class="gg-footer"><div class="gg-footer-grid"><div class="gg-footer-col"><div class="gg-footer-logo-wrap"><span class="gg-footer-logo">🏋️</span><span class="gg-footer-brand">GymGuru</span></div><div class="gg-footer-desc">AI Powered Fitness Coach</div></div><div class="gg-footer-col gg-footer-center"><div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div></div><div class="gg-footer-col gg-footer-right"><div class="gg-footer-links"><a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Privacy</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Terms</a></div></div></div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="gg-footer"><div class="gg-footer-grid"><div class="gg-footer-col"><div class="gg-footer-logo-wrap"><img src="/static/logo.png" class="gg-footer-logo-img" alt="GymGuru Logo"><span class="gg-footer-brand">GymGuru</span></div><div class="gg-footer-desc">AI Powered Fitness Coach</div></div><div class="gg-footer-col gg-footer-center"><div class="gg-footer-copy">&copy; 2025 GymGuru. All rights reserved.</div></div><div class="gg-footer-col gg-footer-right"><div class="gg-footer-links"><a href="https://github.com" target="_blank" class="gg-footer-link">GitHub</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Privacy</a><span class="gg-footer-sep">|</span><a href="#" class="gg-footer-link">Terms</a></div></div></div></div>', unsafe_allow_html=True)
 
 
 # ── Public entry-point (called by main.py) ────────────────────────────────────
