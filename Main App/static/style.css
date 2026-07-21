@@ -409,11 +409,16 @@ p, li, span, label {
   color: #fff !important;
 }
 
+.gg-hero-title a {
+  display: none !important;
+}
+
 .gg-hero-title span.title-gradient {
   background: linear-gradient(90deg, #6C63FF 0%, #8B5CF6 100%) !important;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
 }
 
 .gg-hero-subtitle {
