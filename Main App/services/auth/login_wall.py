@@ -30,8 +30,8 @@ def _navbar() -> None:
     <a href="#" class="gg-nav-logo-group">
       <img src="{_LOGO_URI}" class="gg-nav-logo-img" alt="GymGuru Logo">
       <div class="gg-nav-brand-box">
-        <div class="gg-nav-title">Gym<span>Guru</span></div>
-        <div class="gg-nav-sub">AI Powered Fitness Coach</div>
+        <div class="gg-nav-title">Gym<span class="guru-gradient">Guru</span></div>
+        <span class="gg-nav-sub">AI-Powered Fitness Coach</span>
       </div>
     </a>
     <nav class="gg-nav-center-links">
