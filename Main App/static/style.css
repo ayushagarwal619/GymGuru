@@ -1063,9 +1063,10 @@ div[data-testid="stForm"]:hover {
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 
-/* ── Hero Right Container with Floating Circles ── */
+/* ── Hero Right Container ── */
 .gg-hero-right-container {
   position: relative;
+  z-index: 1;
 }
 
 .gg-hero-right-container::before {
@@ -1075,7 +1076,7 @@ div[data-testid="stForm"]:hover {
   right: -10%;
   width: 250px;
   height: 250px;
-  background: radial-gradient(circle, rgba(124, 92, 255, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.15) 0%, transparent 70%);
   z-index: 0;
   pointer-events: none;
 }
@@ -1149,3 +1150,1206 @@ div[data-testid="stForm"]:hover {
   font-size: 0.78rem;
   color: #6E7681;
 }
+
+/* ── Section Reveal & Entrance Animations ── */
+.reveal-on-scroll {
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.js-active .reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(25px);
+}
+.js-active .reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animated-fade-in-up {
+  opacity: 0;
+  transform: translateY(35px);
+  animation: fadeInUpHero 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animated-slide-in-right {
+  opacity: 0;
+  transform: translateX(45px);
+  animation: slideInRightHero 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.15s;
+}
+
+@keyframes fadeInUpHero {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRightHero {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Respect user reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll,
+  .animated-fade-in-up,
+  .animated-slide-in-right,
+  .gg-feature-card-v3,
+  .gg-ex-card-v3,
+  .dev-comp-card {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ── Hero Backdrop Glows and floating shapes ── */
+.gg-hero-glow {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.08) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(40px);
+}
+.gg-floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.03) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatMovement 16s ease-in-out infinite;
+}
+.gg-floating-shape.shape-1 {
+  width: 140px;
+  height: 140px;
+  top: 25%;
+  left: 5%;
+  animation-delay: 0s;
+}
+.gg-floating-shape.shape-2 {
+  width: 180px;
+  height: 180px;
+  top: 60%;
+  right: 8%;
+  animation-delay: -4s;
+}
+@keyframes floatMovement {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(15deg);
+  }
+}
+
+/* ── Hero Headline phrase fading ── */
+.gg-hero-subtitle-container {
+  min-height: 28px;
+  margin-bottom: 1.25rem;
+}
+.gg-hero-subtitle-phrase {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #7C5CFF;
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+  display: inline-block;
+}
+.gg-hero-subtitle-fade {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #7C5CFF;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: inline-block;
+  opacity: 1;
+  transform: translateY(0);
+}
+.gg-hero-subtitle-fade.fade-out {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+
+/* ── Logo Aura Glow ── */
+.gg-logo-aura-glow {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.25) 0%, transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Trust Badges in Hero ── */
+.gg-hero-trust-badges {
+  margin-top: 2.5rem;
+  border-top: 1px solid #30363D;
+  padding-top: 1.5rem;
+}
+.gg-hero-trust-badges .trust-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #6E7681;
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 0.85rem;
+}
+.gg-hero-trust-badges .trust-logos {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.gg-hero-trust-badges .trust-badge {
+  background: #161B22;
+  border: 1px solid #30363D;
+  color: #9CA3AF;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+/* ── Quote Carousel V2 ── */
+.gg-quote-carousel-v2 {
+  background: #11151D;
+  border-top: 1px solid #30363D;
+  border-bottom: 1px solid #30363D;
+  padding: 4.5rem 1.5rem;
+  text-align: center;
+}
+.gg-quote-wrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gg-quote-mark {
+  font-size: 6rem;
+  color: #7C5CFF;
+  opacity: 0.15;
+  font-family: Georgia, serif;
+  position: absolute;
+  user-select: none;
+}
+.gg-quote-mark.left {
+  top: -2.5rem;
+  left: -2rem;
+}
+.gg-quote-mark.right {
+  bottom: -4.5rem;
+  right: -2rem;
+}
+.gg-quote-text-carousel {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+.gg-quote-text-carousel.fade-out {
+  opacity: 0;
+  transform: scale(0.97);
+}
+
+/* ── Supported Exercises Grid v3 ── */
+.gg-exercises-showcase-grid-v3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.gg-ex-card-v3 {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 290px;
+}
+.gg-ex-card-v3:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+.gg-ex-header-v3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.gg-ex-badge-v3 {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+.gg-ex-icon-v3 {
+  font-size: 2rem;
+}
+.gg-ex-name-v3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 1rem 0;
+}
+.gg-ex-body-v3 {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border-bottom: 1px solid #30363D;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1rem;
+}
+.gg-ex-meta-row {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+}
+.gg-ex-meta-row .meta-label {
+  color: #8B949E;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+.gg-ex-meta-row .meta-val {
+  color: #E6EDF3;
+  font-weight: 600;
+}
+.gg-ex-footer-v3 {
+  font-size: 0.78rem;
+  color: #8B949E;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.gg-ex-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #22C55E;
+  box-shadow: 0 0 8px #22C55E;
+}
+
+/* Individual card colors styling */
+.gg-ex-card-v3.ex-purple {
+  border-left: 3px solid #7C5CFF;
+}
+.gg-ex-card-v3.ex-purple .gg-ex-badge-v3 {
+  background: rgba(124, 92, 255, 0.12);
+  color: #9373FF;
+}
+.gg-ex-card-v3.ex-purple:hover {
+  border-color: #7C5CFF;
+  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.15);
+}
+
+.gg-ex-card-v3.ex-blue {
+  border-left: 3px solid #3B82F6;
+}
+.gg-ex-card-v3.ex-blue .gg-ex-badge-v3 {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+}
+.gg-ex-card-v3.ex-blue:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.15);
+}
+
+.gg-ex-card-v3.ex-green {
+  border-left: 3px solid #10B981;
+}
+.gg-ex-card-v3.ex-green .gg-ex-badge-v3 {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34D399;
+}
+.gg-ex-card-v3.ex-green:hover {
+  border-color: #10B981;
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.15);
+}
+
+.gg-ex-card-v3.ex-orange {
+  border-left: 3px solid #F59E0B;
+}
+.gg-ex-card-v3.ex-orange .gg-ex-badge-v3 {
+  background: rgba(245, 158, 11, 0.12);
+  color: #FBBF24;
+}
+.gg-ex-card-v3.ex-orange:hover {
+  border-color: #F59E0B;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.15);
+}
+
+.gg-ex-card-v3.ex-red {
+  border-left: 3px solid #EF4444;
+}
+.gg-ex-card-v3.ex-red .gg-ex-badge-v3 {
+  background: rgba(239, 68, 68, 0.12);
+  color: #F87171;
+}
+.gg-ex-card-v3.ex-red:hover {
+  border-color: #EF4444;
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.15);
+}
+
+/* ── How It Works Timeline v3 ── */
+.gg-timeline-container-v3 {
+  position: relative;
+  margin-top: 3rem;
+  padding: 1rem 0;
+}
+.gg-timeline-line-bg {
+  position: absolute;
+  top: 26px;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  background: #30363D;
+  z-index: 1;
+}
+.gg-timeline-line-fill {
+  width: 0%;
+  height: 100%;
+  background: #7C5CFF;
+  box-shadow: 0 0 10px #7C5CFF;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gg-timeline-grid-v3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+.gg-timeline-item {
+  text-align: center;
+}
+.gg-timeline-circle-wrap {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #161B22;
+  border: 2px solid #30363D;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gg-timeline-number {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #30363D;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #161B22;
+  transition: all 0.3s ease;
+}
+.gg-timeline-step-icon {
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+.gg-timeline-item:hover .gg-timeline-circle-wrap {
+  border-color: #7C5CFF;
+  background: rgba(124, 92, 255, 0.08);
+  box-shadow: 0 0 15px rgba(124, 92, 255, 0.3);
+  transform: scale(1.08);
+}
+.gg-timeline-item:hover .gg-timeline-number {
+  background: #7C5CFF;
+}
+.gg-timeline-item:hover .gg-timeline-step-icon {
+  transform: rotate(10deg) scale(1.1);
+}
+.gg-timeline-step-title-v3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+.gg-timeline-step-desc-v3 {
+  font-size: 0.8rem;
+  color: #9CA3AF;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 0.5rem;
+}
+
+/* ── Core Features Grid v3 ── */
+.gg-features-grid-v3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.gg-feature-card-v3 {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  padding: 2.25rem 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 200px;
+}
+.gg-feature-card-v3:hover {
+  transform: translateY(-5px);
+  border-color: transparent;
+  box-shadow: 0 12px 30px rgba(124, 92, 255, 0.12);
+}
+.gg-feature-card-v3::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(135deg, transparent 60%, #7C5CFF 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.gg-feature-card-v3:hover::before {
+  opacity: 1;
+}
+.gg-feature-icon-v3 {
+  font-size: 2.2rem;
+  margin-bottom: 1.25rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.gg-feature-card-v3:hover .gg-feature-icon-v3 {
+  transform: scale(1.18) rotate(5deg);
+}
+.gg-feature-title-v3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+.gg-feature-desc-v3 {
+  font-size: 0.88rem;
+  color: #9CA3AF;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* =============================================================
+   GYMGURU REFERENCE RECREATION DESIGN SYSTEM
+   ============================================================= */
+
+/* Master Layout Content Container */
+.gg-landing-v3-root {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+}
+
+/* Section Headings System */
+.gg-section-header-v3 {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.gg-section-label-v3 {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #8B5CF6;
+  margin-bottom: 0.4rem;
+}
+.gg-section-title-v3 {
+  font-size: 2.2rem !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 0.5rem !important;
+}
+.gg-section-desc-v3 {
+  font-size: 0.95rem;
+  color: #9CA3AF;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* 1. Navbar v3 */
+.gg-navbar-v3 {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+  padding: 0.85rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.gg-nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gg-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+}
+.gg-nav-logo-img {
+  height: 32px;
+  width: auto;
+}
+.gg-nav-brand-text {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+}
+.gg-nav-brand-text span {
+  color: #8B5CF6;
+}
+.gg-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.gg-nav-link-item {
+  color: #9CA3AF;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  position: relative;
+}
+.gg-nav-link-item:hover {
+  color: #FFFFFF;
+}
+.gg-nav-btn {
+  background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.35rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(124, 92, 255, 0.3);
+}
+.gg-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 92, 255, 0.45);
+}
+
+/* 2. Hero Left Section v3 */
+.gg-hero-left-v3 {
+  padding-right: 1rem;
+}
+.gg-hero-badge-v3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(124, 92, 255, 0.1);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  color: #A78BFA;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.05em;
+}
+.gg-hero-h1-v3 {
+  font-size: 3.2rem !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 1.25rem !important;
+  letter-spacing: -0.03em !important;
+}
+.gg-hero-h1-v3 .purple-accent {
+  background: linear-gradient(135deg, #A78BFA 0%, #7C5CFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gg-hero-p-v3 {
+  font-size: 1rem;
+  color: #9CA3AF;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+.gg-hero-btns-v3 {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+}
+.gg-hero-btn-primary {
+  background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.75rem 1.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.35);
+}
+.gg-hero-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.5);
+}
+.gg-hero-btn-secondary {
+  background: rgba(22, 27, 34, 0.8);
+  border: 1px solid #30363D;
+  color: #E6EDF3 !important;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.75rem 1.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.gg-hero-btn-secondary:hover {
+  background: #1F242C;
+  border-color: #484F58;
+}
+.gg-hero-trust-strip {
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+.trust-item-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9CA3AF;
+}
+
+/* 2b. Hero Login Card Right v3 */
+.gg-login-card-v3 {
+  background: #161B22;
+  border: 1px solid #7C5CFF;
+  box-shadow: 0 8px 32px rgba(124, 92, 255, 0.18), 0 0 0 1px rgba(124, 92, 255, 0.2);
+  border-radius: 16px;
+  padding: 2.25rem 2rem;
+  position: relative;
+}
+.gg-login-card-v3 .gg-login-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.35rem;
+}
+.gg-login-card-v3 .gg-login-desc {
+  font-size: 0.85rem;
+  color: #9CA3AF;
+  margin-bottom: 1.5rem;
+}
+
+/* 3. Quote Section v3 */
+.gg-quote-card-v3 {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 850px;
+  margin: 3.5rem auto;
+  position: relative;
+}
+.gg-quote-qmark {
+  font-size: 3.5rem;
+  color: #7C5CFF;
+  opacity: 0.4;
+  font-family: Georgia, serif;
+  line-height: 1;
+  vertical-align: middle;
+}
+.gg-quote-text-v3 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: inline-block;
+  margin: 0 1rem;
+}
+.gg-quote-dots {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+.gg-quote-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #30363D;
+}
+.gg-quote-dot.active {
+  background: #7C5CFF;
+  width: 18px;
+  border-radius: 4px;
+}
+
+/* 4. Supported Exercises Grid v3 */
+.gg-exercises-grid-ref {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.gg-exercise-card-ref {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 380px;
+}
+.gg-exercise-card-ref:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Card Accent Variations */
+.gg-exercise-card-ref.squats {
+  border-top: 2px solid #8B5CF6;
+}
+.gg-exercise-card-ref.squats:hover {
+  border-color: #8B5CF6;
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.2);
+}
+.gg-exercise-card-ref.pushups {
+  border-top: 2px solid #F59E0B;
+}
+.gg-exercise-card-ref.pushups:hover {
+  border-color: #F59E0B;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.2);
+}
+.gg-exercise-card-ref.biceps {
+  border-top: 2px solid #EAB308;
+}
+.gg-exercise-card-ref.biceps:hover {
+  border-color: #EAB308;
+  box-shadow: 0 12px 30px rgba(234, 179, 8, 0.2);
+}
+.gg-exercise-card-ref.shoulder {
+  border-top: 2px solid #14B8A6;
+}
+.gg-exercise-card-ref.shoulder:hover {
+  border-color: #14B8A6;
+  box-shadow: 0 12px 30px rgba(20, 184, 166, 0.2);
+}
+.gg-exercise-card-ref.lunges {
+  border-top: 2px solid #EC4899;
+}
+.gg-exercise-card-ref.lunges:hover {
+  border-color: #EC4899;
+  box-shadow: 0 12px 30px rgba(236, 72, 153, 0.2);
+}
+
+.gg-ex-icon-img-ref {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+.gg-ex-title-ref {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+.gg-ex-badge-ref {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+  text-transform: capitalize;
+}
+.gg-ex-badge-ref.purple { background: rgba(139, 92, 246, 0.15); color: #C4B5FD; }
+.gg-ex-badge-ref.amber  { background: rgba(245, 158, 11, 0.15); color: #FDE68A; }
+.gg-ex-badge-ref.gold   { background: rgba(234, 179, 8, 0.15);  color: #FEF08A; }
+.gg-ex-badge-ref.teal   { background: rgba(20, 184, 166, 0.15); color: #99F6E4; }
+.gg-ex-badge-ref.pink   { background: rgba(236, 72, 153, 0.15); color: #FBCFE8; }
+
+.gg-ex-bullet-list-ref {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  text-align: left;
+  width: 100%;
+  flex-grow: 1;
+}
+.gg-ex-bullet-list-ref li {
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.gg-ex-diff-row-ref {
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-top: 1px solid #30363D;
+  padding-top: 0.85rem;
+  width: 100%;
+  justify-content: center;
+}
+.gg-diff-dots {
+  display: flex;
+  gap: 0.25rem;
+}
+.diff-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #484F58;
+}
+.diff-dot.filled-purple { background: #8B5CF6; border-color: #8B5CF6; }
+.diff-dot.filled-amber  { background: #F59E0B; border-color: #F59E0B; }
+.diff-dot.filled-gold   { background: #EAB308; border-color: #EAB308; }
+.diff-dot.filled-teal   { background: #14B8A6; border-color: #14B8A6; }
+.diff-dot.filled-pink   { background: #EC4899; border-color: #EC4899; }
+
+/* 5. How It Works Timeline Track v3 */
+.gg-timeline-track-ref {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 3.5rem;
+}
+.gg-timeline-track-ref::before {
+  content: "";
+  position: absolute;
+  top: 26px;
+  left: 3%;
+  right: 3%;
+  height: 2px;
+  background: linear-gradient(90deg, #7C5CFF 0%, #6366F1 100%);
+  z-index: 1;
+}
+.gg-timeline-step-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  padding: 0 0.5rem;
+}
+.gg-step-circle-ref {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #161B22;
+  border: 2px solid #7C5CFF;
+  box-shadow: 0 0 15px rgba(124, 92, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.gg-step-circle-ref:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(124, 92, 255, 0.6);
+}
+.gg-step-num-tag {
+  position: absolute;
+  bottom: -6px;
+  background: #7C5CFF;
+  color: #FFFFFF;
+  font-size: 0.65rem;
+  font-weight: 800;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gg-step-icon-ref {
+  font-size: 1.4rem;
+}
+.gg-step-title-ref {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 0.35rem 0;
+}
+.gg-step-desc-ref {
+  font-size: 0.78rem;
+  color: #9CA3AF;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* 6. Core Features Cards v3 */
+.gg-features-grid-ref {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.gg-feature-card-ref {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  transition: all 0.3s ease;
+}
+.gg-feature-card-ref:hover {
+  border-color: #7C5CFF;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(124, 92, 255, 0.12);
+}
+.gg-feature-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(124, 92, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+.gg-feature-title-ref {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 0 0.5rem 0;
+}
+.gg-feature-desc-ref {
+  font-size: 0.82rem;
+  color: #9CA3AF;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* 7. Technology Badges Pill Grid v3 */
+.gg-tech-pills-row-ref {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+.gg-tech-pill-ref {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 9999px;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #E6EDF3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+.gg-tech-pill-ref:hover {
+  border-color: #7C5CFF;
+  transform: translateY(-2px);
+  background: #1F242C;
+}
+
+/* 8. Comparison Section Cards v3 */
+.gg-comp-card-ref {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.gg-comp-card-ref.gymguru-card {
+  border-color: #7C5CFF;
+  box-shadow: 0 4px 20px rgba(124, 92, 255, 0.15);
+}
+.gg-comp-card-header {
+  padding: 1.15rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-align: center;
+  background: #0D1117;
+  color: #9CA3AF;
+  border-bottom: 1px solid #30363D;
+}
+.gg-comp-card-header.gymguru-header {
+  background: rgba(124, 92, 255, 0.12);
+  color: #FFFFFF;
+}
+.gg-comp-card-body {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.gg-comp-card-row {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.gg-comp-card-row.bad { color: #9CA3AF; }
+.gg-comp-card-row.good { color: #FFFFFF; font-weight: 600; }
+
+/* 9. CTA Ready Banner v3 */
+.gg-cta-banner-ref {
+  background: linear-gradient(135deg, #4C1D95 0%, #1E1B4B 50%, #311042 100%);
+  border: 1px solid #7C5CFF;
+  border-radius: 16px;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(124, 92, 255, 0.25);
+  margin-top: 3.5rem;
+}
+.gg-cta-title-ref {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 0.5rem !important;
+}
+.gg-cta-desc-ref {
+  font-size: 0.98rem;
+  color: #C4B5FD;
+  margin-bottom: 1.75rem;
+}
+.gg-cta-btn-ref {
+  background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.85rem 2.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+.gg-cta-btn-ref:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.5);
+}
+
+/* 10. Multi-column Footer v3 */
+.gg-footer-v3 {
+  border-top: 1px solid #30363D;
+  padding: 4rem 1.5rem 2rem;
+  margin-top: 5rem;
+  background: #0D1117;
+}
+.gg-footer-grid-v3 {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+.gg-footer-col-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+}
+.gg-footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.gg-footer-links-list li {
+  margin-bottom: 0.5rem;
+}
+.gg-footer-links-list a {
+  color: #9CA3AF;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.gg-footer-links-list a:hover {
+  color: #FFFFFF;
+}
+.gg-footer-bottom-v3 {
+  max-width: 1280px;
+  margin: 0 auto;
+  border-top: 1px solid #30363D;
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: #6E7681;
+}
+.gg-footer-socials {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.1rem;
+}
+.gg-footer-socials a {
+  color: #9CA3AF;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.gg-footer-socials a:hover {
+  color: #7C5CFF;
+}
+
