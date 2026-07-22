@@ -13,6 +13,7 @@ def initial_session_defaults():
         "last_notified_workout_complete": False,
         "last_saved_sets_completed": 0,
         "set_cycle_started_at": 0.0,
+        "elapsed_seconds": 0,
         "last_exercise_type": "Squats",
 
         # Workout plan (set before starting)
