@@ -2353,3 +2353,156 @@ div[data-testid="stForm"]:hover {
   color: #7C5CFF;
 }
 
+/* =============================================================
+   GYMGURU PRODUCTION POLISH STYLES (v3.5)
+   ============================================================= */
+
+/* Navbar 76px Polish */
+.gg-navbar-v3 {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+}
+.gg-nav-subtitle {
+  font-size: 0.65rem;
+  color: #8B949E;
+  display: block;
+  font-weight: 500;
+  margin-top: -2px;
+}
+.gg-nav-gh-btn {
+  background: rgba(22, 27, 34, 0.9);
+  border: 1px solid #30363D;
+  color: #E6EDF3 !important;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  margin-right: 0.65rem;
+}
+.gg-nav-gh-btn:hover {
+  background: #1F242C;
+  border-color: #7C5CFF;
+  color: #FFFFFF !important;
+}
+
+/* Quote Carousel Polish */
+.gg-quote-carousel-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.gg-quote-nav-btn {
+  background: #1F242C;
+  border: 1px solid #30363D;
+  color: #FFFFFF;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: 10;
+}
+.gg-quote-nav-btn:hover {
+  background: #7C5CFF;
+  border-color: #7C5CFF;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(124, 92, 255, 0.5);
+}
+.gg-quote-pills-row {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.75rem;
+}
+.gg-quote-pill-item {
+  background: #161B22;
+  border: 1px solid #30363D;
+  color: #9CA3AF;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.gg-quote-pill-item:hover, .gg-quote-pill-item.active {
+  border-color: #7C5CFF;
+  color: #FFFFFF;
+  background: rgba(124, 92, 255, 0.12);
+}
+
+/* Simplified Exercise Cards */
+.gg-ex-muscles-footer {
+  font-size: 0.75rem;
+  color: #8B949E;
+  border-top: 1px solid #30363D;
+  padding-top: 0.75rem;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+}
+.gg-ex-muscles-footer span {
+  color: #E6EDF3;
+}
+
+/* 5 Core Feature Cards Grid Centering */
+.gg-features-5grid-ref {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+.gg-features-5grid-ref .gg-feature-card-ref {
+  flex: 1 1 280px;
+  max-width: 380px;
+  min-height: 180px;
+}
+
+/* Input Focus Glow & Button Hover */
+.gg-login-card-v3 input:focus {
+  border-color: #7C5CFF !important;
+  box-shadow: 0 0 12px rgba(124, 92, 255, 0.35) !important;
+  outline: none !important;
+}
+
+/* Back to Top Sticky Button */
+.gg-back-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #7C5CFF;
+  color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.4);
+  transition: all 0.25s ease;
+  z-index: 999;
+}
+.gg-back-to-top-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 25px rgba(124, 92, 255, 0.6);
+  background: #6366F1;
+}
+

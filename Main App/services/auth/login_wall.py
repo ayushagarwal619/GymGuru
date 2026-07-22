@@ -1,7 +1,7 @@
 """
-login_wall.py — GymGuru Landing / Login Page (Reference-Matched Design v3)
-────────────────────────────────────────────────────────────────────
-Auth logic is 100% unchanged:  get_or_create_user(), session_state
+login_wall.py — GymGuru Landing / Login Page (Final Production Polish v3.5)
+───────────────────────────────────────────────────────────────────
+Auth logic is 100% unchanged: get_or_create_user(), session_state
 keys "user_id" / "username", form key "login_form" — preserved.
 """
 
@@ -22,14 +22,17 @@ def _get_base64_logo() -> str:
 _LOGO_URI = _get_base64_logo()
 
 
-# ── Section 1: Navbar v3 ──────────────────────────────────────────────────────
+# ── Section 1: Navbar v3.5 ───────────────────────────────────────────────────
 def _navbar() -> None:
     html = f"""
 <header class="gg-navbar-v3">
   <div class="gg-nav-inner">
     <a href="#" class="gg-nav-brand">
       <img src="{_LOGO_URI}" class="gg-nav-logo-img" alt="GymGuru Logo">
-      <span class="gg-nav-brand-text">Gym<span>Guru</span></span>
+      <div>
+        <div class="gg-nav-brand-text">Gym<span>Guru</span></div>
+        <span class="gg-nav-subtitle">AI-Powered Fitness Coach</span>
+      </div>
     </a>
     <nav class="gg-nav-links">
       <a href="#exercises" class="gg-nav-link-item">Exercises</a>
@@ -38,14 +41,17 @@ def _navbar() -> None:
       <a href="#technology" class="gg-nav-link-item">Technology</a>
       <a href="#about" class="gg-nav-link-item">About</a>
     </nav>
-    <a href="#login-card" class="gg-nav-btn">Start Training →</a>
+    <div style="display: flex; align-items: center;">
+      <a href="https://github.com" target="_blank" class="gg-nav-gh-btn"><span>🐙</span> GitHub</a>
+      <a href="#login-card" class="gg-nav-btn">Start Training →</a>
+    </div>
   </div>
 </header>
 """
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 2: Hero Left Column v3 ───────────────────────────────────────────
+# ── Section 2: Hero Left Column v3.5 ──────────────────────────────────────────
 def _hero_left() -> None:
     html = """
 <div class="gg-hero-left-v3">
@@ -62,7 +68,7 @@ def _hero_left() -> None:
   
   <div class="gg-hero-btns-v3">
     <a href="#login-card" class="gg-hero-btn-primary">Start Training →</a>
-    <a href="#exercises" class="gg-hero-btn-secondary">Learn More</a>
+    <a href="#how-it-works" class="gg-hero-btn-secondary">See How It Works</a>
   </div>
   
   <div class="gg-hero-trust-strip">
@@ -76,26 +82,44 @@ def _hero_left() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 3: Quote Section v3 ──────────────────────────────────────────────
+# ── Section 3: Interactive Quote Carousel v3.5 ────────────────────────────────
 def _quotes() -> None:
     html = """
-<div class="gg-quote-card-v3">
-  <span class="gg-quote-qmark">“</span>
-  <h2 class="gg-quote-text-v3">Discipline Beats Motivation.</h2>
-  <span class="gg-quote-qmark">”</span>
-  <div class="gg-quote-dots">
-    <div class="gg-quote-dot"></div>
-    <div class="gg-quote-dot"></div>
+<div class="gg-quote-card-v3" id="gg-quote-container">
+  <div class="gg-quote-carousel-wrap">
+    <button class="gg-quote-nav-btn" id="gg-quote-prev">‹</button>
+    <div>
+      <span class="gg-quote-qmark">“</span>
+      <h2 class="gg-quote-text-v3" id="gg-quote-text">Discipline Beats Motivation.</h2>
+      <span class="gg-quote-qmark">”</span>
+    </div>
+    <button class="gg-quote-nav-btn" id="gg-quote-next">›</button>
+  </div>
+  
+  <div class="gg-quote-dots" id="gg-quote-dots-container">
     <div class="gg-quote-dot active"></div>
     <div class="gg-quote-dot"></div>
     <div class="gg-quote-dot"></div>
+    <div class="gg-quote-dot"></div>
+    <div class="gg-quote-dot"></div>
+  </div>
+
+  <div class="gg-quote-pills-row">
+    <div class="gg-quote-pill-item">Perfect Form Creates Perfect Results.</div>
+    <div class="gg-quote-pill-item">Train Smarter, Not Harder.</div>
+    <div class="gg-quote-pill-item">Consistency Builds Champions.</div>
+    <div class="gg-quote-pill-item">Your Form Is Your Foundation.</div>
+    <div class="gg-quote-pill-item">Every Rep Counts.</div>
+    <div class="gg-quote-pill-item">Stronger Today, Better Tomorrow.</div>
+    <div class="gg-quote-pill-item">Focus. Form. Finish.</div>
+    <div class="gg-quote-pill-item">Small Progress, Big Results.</div>
   </div>
 </div>
 """
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 4: Supported Exercises Grid v3 ───────────────────────────────────
+# ── Section 4: Supported Exercises Grid (Simplified v3.5) ─────────────────────
 def _exercises() -> None:
     exercises_data = [
         {
@@ -105,8 +129,7 @@ def _exercises() -> None:
             "badge": "Lower Body",
             "badge_color": "purple",
             "bullets": ["Knee Tracking", "Depth Analysis", "Back Alignment", "Glute Activation"],
-            "diff_class": "filled-purple",
-            "filled": 1
+            "muscles": "Quads, Glutes, Hamstrings"
         },
         {
             "class": "pushups",
@@ -115,8 +138,7 @@ def _exercises() -> None:
             "badge": "Upper Body",
             "badge_color": "amber",
             "bullets": ["Depth Tracking", "Elbow Angle", "Spine Alignment", "Chest Activation"],
-            "diff_class": "filled-amber",
-            "filled": 2
+            "muscles": "Chest, Triceps, Shoulders"
         },
         {
             "class": "biceps",
@@ -125,8 +147,7 @@ def _exercises() -> None:
             "badge": "Arms",
             "badge_color": "gold",
             "bullets": ["Elbow Tracking", "Range of Motion", "Form Analysis", "Muscle Activation"],
-            "diff_class": "filled-gold",
-            "filled": 2
+            "muscles": "Biceps, Forearms"
         },
         {
             "class": "shoulder",
@@ -135,8 +156,7 @@ def _exercises() -> None:
             "badge": "Shoulders",
             "badge_color": "teal",
             "bullets": ["Overhead Tracking", "Spine Alignment", "Elbow Position", "Shoulder Stability"],
-            "diff_class": "filled-teal",
-            "filled": 2
+            "muscles": "Deltoids, Triceps"
         },
         {
             "class": "lunges",
@@ -145,20 +165,12 @@ def _exercises() -> None:
             "badge": "Lower Body",
             "badge_color": "pink",
             "bullets": ["Knee Alignment", "Step Distance", "Balance Tracking", "Posture Analysis"],
-            "diff_class": "filled-pink",
-            "filled": 3
+            "muscles": "Quads, Glutes, Calves"
         }
     ]
 
     cards_html = []
     for ex in exercises_data:
-        dots = ""
-        for i in range(3):
-            if i < ex["filled"]:
-                dots += f'<div class="diff-dot {ex["diff_class"]}"></div>'
-            else:
-                dots += '<div class="diff-dot"></div>'
-
         bullets_html = "".join([f'<li>&bull; {b}</li>' for b in ex["bullets"]])
 
         card = f"""
@@ -169,9 +181,8 @@ def _exercises() -> None:
   <ul class="gg-ex-bullet-list-ref">
     {bullets_html}
   </ul>
-  <div class="gg-ex-diff-row-ref">
-    <span>Difficulty</span>
-    <div class="gg-diff-dots">{dots}</div>
+  <div class="gg-ex-muscles-footer">
+    Muscles: <span>{ex["muscles"]}</span>
   </div>
 </div>
 """
@@ -194,7 +205,7 @@ def _exercises() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 5: How GymGuru Works Timeline v3 ─────────────────────────────────
+# ── Section 5: How GymGuru Works Timeline v3.5 ────────────────────────────────
 def _timeline() -> None:
     steps = [
         {"num": "1", "icon": "🔒", "title": "Secure Login", "desc": "Access your personal dashboard"},
@@ -230,15 +241,15 @@ def _timeline() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 6: Core Features Grid v3 ─────────────────────────────────────────
+# ── Section 6: Core Features Grid (5 Cards Centered v3.5) ────────────────────
 def _features() -> None:
+    # 5 features only as requested (SQLite Database removed)
     features = [
         ("🎯", "Real-Time Pose Detection", "33 MediaPipe landmarks track your every movement."),
         ("🔢", "Automatic Rep Counting", "Accurate reps using joint angles and smart algorithms."),
         ("🔊", "AI Voice Coach", "Groq LLaMA 3.3 voice gives you real-time motivation."),
         ("🛡️", "Form Correction", "Instant feedback to fix your posture and avoid injuries."),
-        ("📜", "Workout History", "Logs sets, reps, duration & performance automatically."),
-        ("🗄️", "SQLite Database", "All data stored securely on your local machine.")
+        ("📜", "Workout History", "Logs sets, reps, duration & performance automatically.")
     ]
 
     cards_html = "".join([f"""
@@ -254,8 +265,9 @@ def _features() -> None:
   <div class="gg-section-header-v3">
     <div class="gg-section-label-v3">POWERED BY AI</div>
     <h2 class="gg-section-title-v3">Core Features</h2>
+    <p class="gg-section-desc-v3">Advanced tools designed to deliver professional-grade training guidance</p>
   </div>
-  <div class="gg-features-grid-ref">
+  <div class="gg-features-5grid-ref">
     {cards_html}
   </div>
 </div>
@@ -263,7 +275,7 @@ def _features() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 7: Built with Modern Technology v3 ───────────────────────────────
+# ── Section 7: Built with Modern Technology v3.5 ──────────────────────────────
 def _technology() -> None:
     html = """
 <div class="gg-landing-v3-root" id="technology" style="padding-top: 5rem;">
@@ -275,16 +287,16 @@ def _technology() -> None:
     <div class="gg-tech-pill-ref">⚙️ MediaPipe Pose</div>
     <div class="gg-tech-pill-ref">👁️ OpenCV</div>
     <div class="gg-tech-pill-ref">🤖 Groq LLaMA 3.3</div>
-    <div class="gg-tech-pill-ref">🗄️ SQLite</div>
     <div class="gg-tech-pill-ref">🎈 Streamlit</div>
     <div class="gg-tech-pill-ref">📹 WebRTC</div>
+    <div class="gg-tech-pill-ref">🗄️ SQLite</div>
   </div>
 </div>
 """
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 8: Traditional Apps vs GymGuru v3 ────────────────────────────────
+# ── Section 8: Traditional Apps vs GymGuru v3.5 ───────────────────────────────
 def _comparison() -> None:
     st.markdown("""
 <div class="gg-landing-v3-root" style="padding-top: 5rem;">
@@ -324,7 +336,7 @@ def _comparison() -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Section 9: Ready to Transform CTA Banner v3 ───────────────────────────────
+# ── Section 9: Ready to Transform CTA Banner v3.5 ──────────────────────────────
 def _cta_ready() -> None:
     html = """
 <div class="gg-landing-v3-root">
@@ -338,10 +350,10 @@ def _cta_ready() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 10: Multi-column Footer v3 ────────────────────────────────────────
+# ── Section 10: Multi-column Footer v3.5 ───────────────────────────────────────
 def _footer() -> None:
     html = f"""
-<footer class="gg-footer-v3">
+<footer class="gg-footer-v3" id="about">
   <div class="gg-footer-grid-v3">
     <div>
       <div class="gg-nav-brand" style="margin-bottom: 0.75rem;">
@@ -386,7 +398,7 @@ def _footer() -> None:
   </div>
   
   <div class="gg-footer-bottom-v3">
-    <div>&copy; 2025 GymGuru. All rights reserved.</div>
+    <div>&copy; 2026 GymGuru. All rights reserved.</div>
     <div class="gg-footer-socials">
       <a href="https://github.com" target="_blank">🌐</a>
       <a href="#">𝕏</a>
@@ -394,6 +406,7 @@ def _footer() -> None:
       <a href="#">💬</a>
     </div>
   </div>
+  <a href="#" class="gg-back-to-top-btn" title="Back to Top">↑</a>
 </footer>
 """
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
@@ -404,7 +417,7 @@ def render_login_wall() -> bool:
     if st.session_state.get("user_id") is not None:
         return True
 
-    # Background styling for reference-matched landing page
+    # Background styling
     st.markdown("""
     <style>
     .stApp {
@@ -425,7 +438,7 @@ def render_login_wall() -> bool:
     # Master Content Container for Hero
     st.markdown('<div class="gg-landing-v3-root">', unsafe_allow_html=True)
 
-    # 2. Hero Section (Left info + Right Login card)
+    # 2. Hero Section
     col1, col2 = st.columns([1.25, 1], gap="large")
 
     with col1:
@@ -470,7 +483,7 @@ def render_login_wall() -> bool:
         st.session_state["username"] = user["username"]
         st.rerun()
 
-    # 3. Quote Section
+    # 3. Interactive Quote Section
     _quotes()
 
     # 4. Supported Exercises
@@ -493,5 +506,77 @@ def render_login_wall() -> bool:
 
     # 10. Footer
     _footer()
+
+    # Interactive Quote Carousel Script
+    carousel_script = """
+<script>
+(function() {
+  const quotes = [
+    "Discipline Beats Motivation.",
+    "Perfect Form Creates Perfect Results.",
+    "Train Smarter, Not Harder.",
+    "Consistency Builds Champions.",
+    "Your Form Is Your Foundation.",
+    "Every Rep Counts.",
+    "Stronger Today, Better Tomorrow.",
+    "Focus. Form. Finish.",
+    "Small Progress, Big Results.",
+    "Push Your Limits Daily."
+  ];
+
+  let currentIdx = 0;
+  let timer = null;
+
+  function updateQuote(index) {
+    currentIdx = (index + quotes.length) % quotes.length;
+    const qText = document.getElementById("gg-quote-text");
+    if (qText) {
+      qText.style.opacity = 0;
+      setTimeout(() => {
+        qText.innerText = quotes[currentIdx];
+        qText.style.opacity = 1;
+      }, 200);
+    }
+  }
+
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(() => {
+      updateQuote(currentIdx + 1);
+    }, 3000);
+  }
+
+  function stopTimer() {
+    if (timer) clearInterval(timer);
+  }
+
+  document.addEventListener("click", function(e) {
+    if (e.target && e.target.id === "gg-quote-prev") {
+      updateQuote(currentIdx - 1);
+      startTimer();
+    } else if (e.target && e.target.id === "gg-quote-next") {
+      updateQuote(currentIdx + 1);
+      startTimer();
+    } else if (e.target && e.target.classList.contains("gg-quote-pill-item")) {
+      const txt = e.target.innerText;
+      const idx = quotes.indexOf(txt);
+      if (idx !== -1) {
+        updateQuote(idx);
+        startTimer();
+      }
+    }
+  });
+
+  const container = document.getElementById("gg-quote-container");
+  if (container) {
+    container.addEventListener("mouseenter", stopTimer);
+    container.addEventListener("mouseleave", startTimer);
+  }
+
+  startTimer();
+})();
+</script>
+"""
+    st.markdown(carousel_script.replace('\n', ''), unsafe_allow_html=True)
 
     return False
