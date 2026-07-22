@@ -1,5 +1,5 @@
 """
-login_wall.py — GymGuru Landing / Login Page (Final Production Polish v3.5)
+login_wall.py — GymGuru Landing / Login Page (Hero Redesign Strict Phase)
 ───────────────────────────────────────────────────────────────────
 Auth logic is 100% unchanged: get_or_create_user(), session_state
 keys "user_id" / "username", form key "login_form" — preserved.
@@ -22,28 +22,31 @@ def _get_base64_logo() -> str:
 _LOGO_URI = _get_base64_logo()
 
 
-# ── Section 1: Navbar v3.5 ───────────────────────────────────────────────────
+# ── Section 1: Navbar Redesign ────────────────────────────────────────────────
 def _navbar() -> None:
     html = f"""
-<header class="gg-navbar-v3">
-  <div class="gg-nav-inner">
-    <a href="#" class="gg-nav-brand">
+<header class="gg-hero-navbar">
+  <div class="gg-nav-content">
+    <a href="#" class="gg-nav-logo-group">
       <img src="{_LOGO_URI}" class="gg-nav-logo-img" alt="GymGuru Logo">
-      <div>
-        <div class="gg-nav-brand-text">Gym<span>Guru</span></div>
-        <span class="gg-nav-subtitle">AI-Powered Fitness Coach</span>
+      <div class="gg-nav-brand-box">
+        <div class="gg-nav-title">Gym<span>Guru</span></div>
+        <div class="gg-nav-sub">AI Powered Fitness Coach</div>
       </div>
     </a>
-    <nav class="gg-nav-links">
-      <a href="#exercises" class="gg-nav-link-item">Exercises</a>
-      <a href="#how-it-works" class="gg-nav-link-item">Workflow</a>
-      <a href="#features" class="gg-nav-link-item">Features</a>
-      <a href="#technology" class="gg-nav-link-item">Technology</a>
-      <a href="#about" class="gg-nav-link-item">About</a>
+    <nav class="gg-nav-center-links">
+      <a href="#exercises" class="gg-nav-item">Exercises</a>
+      <a href="#how-it-works" class="gg-nav-item">Workflow</a>
+      <a href="#features" class="gg-nav-item">Features</a>
+      <a href="#technology" class="gg-nav-item">Technology</a>
+      <a href="#about" class="gg-nav-item">About</a>
     </nav>
-    <div style="display: flex; align-items: center;">
-      <a href="https://github.com" target="_blank" class="gg-nav-gh-btn"><span>🐙</span> GitHub</a>
-      <a href="#login-card" class="gg-nav-btn">Start Training →</a>
+    <div class="gg-nav-actions">
+      <a href="https://github.com" target="_blank" class="gg-nav-gh-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="#login-card" class="gg-nav-cta-btn">Start Training →</a>
     </div>
   </div>
 </header>
@@ -51,38 +54,71 @@ def _navbar() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 2: Hero Left Column v3.5 ──────────────────────────────────────────
+# ── Section 2: Hero Left Column Redesign ──────────────────────────────────────
 def _hero_left() -> None:
     html = """
-<div class="gg-hero-left-v3">
-  <div class="gg-hero-badge-v3">
-    <span>✨</span> AI POWERED FITNESS COACH
+<div class="gg-hero-left-col">
+  <div class="gg-hero-pill-badge">
+    <span style="color:#F59E0B;">★</span> AI POWERED FITNESS COACH
   </div>
-  <h1 class="gg-hero-h1-v3">
+  <h1 class="gg-hero-title-main">
     Train Smarter.<br>
-    Get <span class="purple-accent">Stronger.</span>
+    Get <span class="purple-gradient-text">Stronger.</span>
   </h1>
-  <p class="gg-hero-p-v3">
+  <p class="gg-hero-desc-text">
     Real-time AI posture correction, rep counting, and voice coaching to help you train with perfect form and maximum results.
   </p>
   
-  <div class="gg-hero-btns-v3">
-    <a href="#login-card" class="gg-hero-btn-primary">Start Training →</a>
-    <a href="#how-it-works" class="gg-hero-btn-secondary">See How It Works</a>
+  <div class="gg-hero-actions-row">
+    <a href="#login-card" class="gg-hero-primary-btn">Start Training →</a>
+    <a href="#how-it-works" class="gg-hero-secondary-btn">
+      <span style="font-size: 0.85rem;">▷</span> See How It Works
+    </a>
   </div>
   
-  <div class="gg-hero-trust-strip">
-    <div class="trust-item-pill"><span>★</span> AI Coach</div>
-    <div class="trust-item-pill"><span>⚡</span> Real-time Feedback</div>
-    <div class="trust-item-pill"><span>🔒</span> Privacy Focused</div>
-    <div class="trust-item-pill"><span>👥</span> Trusted by 1000+ users</div>
+  <div class="gg-hero-metrics-grid">
+    <div class="gg-hero-metric-card">
+      <div class="metric-icon-box">🕴️</div>
+      <div class="metric-info">
+        <div class="metric-val">33</div>
+        <div class="metric-lbl">MediaPipe Landmarks</div>
+      </div>
+    </div>
+    <div class="gg-hero-metric-card">
+      <div class="metric-icon-box">🏋️</div>
+      <div class="metric-info">
+        <div class="metric-val">5</div>
+        <div class="metric-lbl">AI-Supported Exercises</div>
+      </div>
+    </div>
+    <div class="gg-hero-metric-card">
+      <div class="metric-icon-box">🔊</div>
+      <div class="metric-info">
+        <div class="metric-val">Groq LLaMA 3.3</div>
+        <div class="metric-lbl">Voice Coach</div>
+      </div>
+    </div>
+    <div class="gg-hero-metric-card">
+      <div class="metric-icon-box">🛡️</div>
+      <div class="metric-info">
+        <div class="metric-val">SQLite</div>
+        <div class="metric-lbl">Local & Private</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gg-hero-feature-pills">
+    <div class="feature-pill-item">✓ AI Coach</div>
+    <div class="feature-pill-item">✓ Real-time Feedback</div>
+    <div class="feature-pill-item">✓ Local Privacy</div>
+    <div class="feature-pill-item">✓ Browser Based</div>
   </div>
 </div>
 """
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 3: Interactive Quote Carousel v3.5 ────────────────────────────────
+# ── Section 3: Interactive Quote Carousel ────────────────────────────────────
 def _quotes() -> None:
     html = """
 <div class="gg-quote-card-v3" id="gg-quote-container">
@@ -119,7 +155,7 @@ def _quotes() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 4: Supported Exercises Grid (Simplified v3.5) ─────────────────────
+# ── Section 4: Supported Exercises Grid ───────────────────────────────────────
 def _exercises() -> None:
     exercises_data = [
         {
@@ -205,7 +241,7 @@ def _exercises() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 5: How GymGuru Works Timeline v3.5 ────────────────────────────────
+# ── Section 5: How GymGuru Works Timeline ─────────────────────────────────────
 def _timeline() -> None:
     steps = [
         {"num": "1", "icon": "🔒", "title": "Secure Login", "desc": "Access your personal dashboard"},
@@ -241,9 +277,8 @@ def _timeline() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 6: Core Features Grid (5 Cards Centered v3.5) ────────────────────
+# ── Section 6: Core Features Grid ─────────────────────────────────────────────
 def _features() -> None:
-    # 5 features only as requested (SQLite Database removed)
     features = [
         ("🎯", "Real-Time Pose Detection", "33 MediaPipe landmarks track your every movement."),
         ("🔢", "Automatic Rep Counting", "Accurate reps using joint angles and smart algorithms."),
@@ -275,7 +310,7 @@ def _features() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 7: Built with Modern Technology v3.5 ──────────────────────────────
+# ── Section 7: Built with Modern Technology ───────────────────────────────────
 def _technology() -> None:
     html = """
 <div class="gg-landing-v3-root" id="technology" style="padding-top: 5rem;">
@@ -296,7 +331,7 @@ def _technology() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 8: Traditional Apps vs GymGuru v3.5 ───────────────────────────────
+# ── Section 8: Traditional Apps vs GymGuru ────────────────────────────────────
 def _comparison() -> None:
     st.markdown("""
 <div class="gg-landing-v3-root" style="padding-top: 5rem;">
@@ -336,7 +371,7 @@ def _comparison() -> None:
 """, unsafe_allow_html=True)
 
 
-# ── Section 9: Ready to Transform CTA Banner v3.5 ──────────────────────────────
+# ── Section 9: Ready to Transform CTA Banner ───────────────────────────────────
 def _cta_ready() -> None:
     html = """
 <div class="gg-landing-v3-root">
@@ -350,7 +385,7 @@ def _cta_ready() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 10: Multi-column Footer v3.5 ───────────────────────────────────────
+# ── Section 10: Multi-column Footer ───────────────────────────────────────────
 def _footer() -> None:
     html = f"""
 <footer class="gg-footer-v3" id="about">
@@ -417,12 +452,13 @@ def render_login_wall() -> bool:
     if st.session_state.get("user_id") is not None:
         return True
 
-    # Background styling
+    # Background styling with top radial purple glow
     st.markdown("""
     <style>
     .stApp {
         background-color: #0D1117 !important;
-        background-image: linear-gradient(180deg, rgba(13, 17, 23, 0.92) 0%, rgba(19, 23, 34, 0.85) 50%, rgba(13, 17, 23, 0.95) 100%), 
+        background-image: radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.15) 0%, transparent 45%),
+                          linear-gradient(180deg, rgba(13, 17, 23, 0.92) 0%, rgba(19, 23, 34, 0.85) 50%, rgba(13, 17, 23, 0.95) 100%), 
                           url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600') !important;
         background-size: cover !important;
         background-position: center !important;
@@ -432,13 +468,12 @@ def render_login_wall() -> bool:
     </style>
     """, unsafe_allow_html=True)
 
-    # 1. Sticky Navbar
+    # 1. Sticky Redesigned Navbar
     _navbar()
 
-    # Master Content Container for Hero
-    st.markdown('<div class="gg-landing-v3-root">', unsafe_allow_html=True)
+    # 2. Full Viewport Hero Section Layout (55% Left, 45% Right)
+    st.markdown('<div class="gg-hero-section-container">', unsafe_allow_html=True)
 
-    # 2. Hero Section
     col1, col2 = st.columns([1.25, 1], gap="large")
 
     with col1:
@@ -447,10 +482,13 @@ def render_login_wall() -> bool:
     with col2:
         with st.form("login_form", clear_on_submit=False):
             st.markdown("""
-            <div class="gg-login-card-v3" id="login-card">
-              <div class="gg-login-title">Welcome back! 👋</div>
-              <div class="gg-login-desc">
-                Log in to continue your fitness journey.
+            <div class="gg-login-card-container" id="login-card">
+              <div class="gg-login-card-header">
+                <div class="gg-login-avatar">👋</div>
+                <div class="gg-login-header-text">
+                  <div class="gg-login-title">Welcome back!</div>
+                  <div class="gg-login-sub">Log in to continue your fitness journey.</div>
+                </div>
               </div>
             </div>
             """, unsafe_allow_html=True)
@@ -467,7 +505,7 @@ def render_login_wall() -> bool:
             )
 
             st.markdown("""
-            <div style="margin-top: 1rem; text-align: center; font-size: 0.78rem; color: #9CA3AF;">
+            <div style="margin-top: 1.25rem; text-align: center; font-size: 0.78rem; color: #9CA3AF;">
               🔒 Your data is stored locally and stays private.
             </div>
             """, unsafe_allow_html=True)
@@ -483,7 +521,7 @@ def render_login_wall() -> bool:
         st.session_state["username"] = user["username"]
         st.rerun()
 
-    # 3. Interactive Quote Section
+    # 3. Quote Section
     _quotes()
 
     # 4. Supported Exercises

@@ -2506,3 +2506,338 @@ div[data-testid="stForm"]:hover {
   background: #6366F1;
 }
 
+/* =============================================================
+   GYMGURU HERO SECTION REDESIGN (REF-MATCHED 2-COLUMN LAYOUT)
+   ============================================================= */
+
+/* Navbar Redesign */
+.gg-hero-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(48, 54, 61, 0.6);
+  padding: 0 2rem;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.gg-nav-content {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.gg-nav-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+.gg-nav-logo-img {
+  height: 38px;
+  width: auto;
+  border-radius: 6px;
+}
+.gg-nav-brand-box {
+  display: flex;
+  flex-direction: column;
+}
+.gg-nav-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.gg-nav-title span {
+  color: #8B5CF6;
+}
+.gg-nav-sub {
+  font-size: 0.68rem;
+  color: #8B949E;
+  font-weight: 500;
+  margin-top: 1px;
+}
+.gg-nav-center-links {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+.gg-nav-item {
+  color: #9CA3AF;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 0.3rem 0;
+}
+.gg-nav-item:hover {
+  color: #FFFFFF;
+}
+.gg-nav-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #7C5CFF;
+  transition: width 0.2s ease;
+  border-radius: 2px;
+}
+.gg-nav-item:hover::after {
+  width: 100%;
+}
+.gg-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.gg-nav-gh-link {
+  background: rgba(22, 27, 34, 0.8);
+  border: 1px solid #30363D;
+  color: #E6EDF3 !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+.gg-nav-gh-link:hover {
+  background: #1F242C;
+  border-color: #7C5CFF;
+  color: #FFFFFF !important;
+}
+.gg-nav-cta-btn {
+  background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.45rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(124, 92, 255, 0.35);
+}
+.gg-nav-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(124, 92, 255, 0.5);
+}
+
+/* Hero Section Base Container */
+.gg-hero-section-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+}
+
+/* Left 55% Column */
+.gg-hero-left-col {
+  padding-right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.gg-hero-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(124, 92, 255, 0.12);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  color: #A78BFA;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.38rem 0.9rem;
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+  width: fit-content;
+}
+.gg-hero-title-main {
+  font-size: 3.8rem !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 1.25rem !important;
+  letter-spacing: -0.03em !important;
+}
+.purple-gradient-text {
+  background: linear-gradient(135deg, #A78BFA 0%, #7C5CFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gg-hero-desc-text {
+  font-size: 1.05rem;
+  color: #9CA3AF;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 520px;
+}
+.gg-hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.gg-hero-primary-btn {
+  background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 18px rgba(124, 92, 255, 0.4);
+}
+.gg-hero-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124, 92, 255, 0.6);
+}
+.gg-hero-secondary-btn {
+  background: rgba(22, 27, 34, 0.85);
+  border: 1px solid #30363D;
+  color: #E6EDF3 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+.gg-hero-secondary-btn:hover {
+  background: #1F242C;
+  border-color: #7C5CFF;
+}
+
+/* Metric Cards Grid under Hero Left */
+.gg-hero-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+.gg-hero-metric-card {
+  background: #161B22;
+  border: 1px solid #30363D;
+  border-radius: 10px;
+  padding: 0.85rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: all 0.2s ease;
+}
+.gg-hero-metric-card:hover {
+  border-color: #7C5CFF;
+  transform: translateY(-2px);
+  background: #1C2129;
+}
+.metric-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(124, 92, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+.metric-val {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+.metric-lbl {
+  font-size: 0.65rem;
+  color: #8B949E;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.gg-hero-feature-pills {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.feature-pill-item {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Right 45% Column — Redesigned Login Card */
+.gg-login-card-container {
+  background: #161B22;
+  border: 1px solid #7C5CFF;
+  box-shadow: 0 12px 40px rgba(124, 92, 255, 0.22), 0 0 0 1px rgba(124, 92, 255, 0.2);
+  border-radius: 20px;
+  padding: 2.25rem 2rem;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.gg-login-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.gg-login-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(124, 92, 255, 0.15);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.gg-login-header-text {
+  display: flex;
+  flex-direction: column;
+}
+.gg-login-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-bottom: 0.2rem;
+}
+.gg-login-sub {
+  font-size: 0.85rem;
+  color: #9CA3AF;
+}
+
