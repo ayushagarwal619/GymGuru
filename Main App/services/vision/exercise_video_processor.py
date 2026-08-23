@@ -44,7 +44,13 @@ class VideoProcessorClass(VideoProcessorBase):
         }
 
         self._frame_timestamps_ms = 0
-    
+
+    def reset_detectors(self):
+        with self._lock:
+            for d in self._detectors.values():
+                d.reset()
+            self._latest_metrics = None
+
     def set_latest_metrics(self, metrics):
         with self._lock:
             self._latest_metrics = metrics.copy()
@@ -52,15 +58,19 @@ class VideoProcessorClass(VideoProcessorBase):
     def get_latest_metrics(self):
         with self._lock:
             return None if self._latest_metrics is None else self._latest_metrics.copy()
-        
+
     def set_exercise(self, exercise_type):
         with self._lock:
-            self._exercise_type = exercise_type
+            if self._exercise_type != exercise_type:
+                self._exercise_type = exercise_type
+                if exercise_type in self._detectors:
+                    self._detectors[exercise_type].reset()
+                self._latest_metrics = None
 
     def get_exercise(self):
         with self._lock:
             return self._exercise_type
-        
+
     def _draw_skeleton(self, img, landmarks):
         h, w = img.shape[:2]
 
@@ -76,7 +86,7 @@ class VideoProcessorClass(VideoProcessorBase):
                     (0, 255, 0),
                     8
                 )
-        
+
         for lm in landmarks:
             if lm.visibility > 0.7:
                 cv2.circle(
@@ -86,7 +96,7 @@ class VideoProcessorClass(VideoProcessorBase):
                     (255, 0, 0),
                     -1
                 )
-            
+
     def _draw_no_pose_warnings(self, img):
         cv2.putText(
             img,
@@ -94,18 +104,18 @@ class VideoProcessorClass(VideoProcessorBase):
             (30, 50),
             cv2.FONT_HERSHEY_SIMPLEX,
             1,
-            (0, 255, 0),
+            (0, 0, 255),
             2,
             cv2.LINE_AA,
         )
 
         cv2.putText(
             img,
-            "PLEASE FACE THE CAMERA",
+            "PLEASE STEP INTO CAMERA FRAME",
             (30, 100),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
-            (0, 255, 0),
+            0.8,
+            (0, 255, 255),
             2,
             cv2.LINE_AA,
         )
@@ -122,68 +132,62 @@ class VideoProcessorClass(VideoProcessorBase):
         elif ex_type == "Lunges":
             self._draw_lunge_overlays(img, metrics)
 
-
     def _draw_squats_overlays(self, img, metrics):
         h, _ = img.shape[:2]
-
         cv2.putText(
             img,
-            f"DEPTH: {metrics['depth_status']}",
+            f"REPS: {metrics.get('reps', 0)} | DEPTH: {metrics.get('depth_status', 'N/A')}",
             (20, h - 20),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.9,
             (0, 255, 0),
             2,
         )
-    
+
     def _draw_pushup_overlays(self, img, metrics):
         h, _ = img.shape[:2]
-
         cv2.putText(
             img,
-            f"BODY: {metrics['body_alignment']} | HIP: {metrics['hip_status']}",
+            f"REPS: {metrics.get('reps', 0)} | BODY: {metrics.get('body_alignment', 'N/A')} | HIP: {metrics.get('hip_status', 'N/A')}",
             (20, h - 20),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.8,
             (0, 255, 0),
             2,
         )
 
     def _draw_curl_overlays(self, img, metrics):
         h, _ = img.shape[:2]
-
         cv2.putText(
             img,
-            f"SWING: {metrics['swing_status']}",
+            f"REPS: {metrics.get('reps', 0)} | SWING: {metrics.get('swing_status', 'N/A')}",
             (20, h - 20),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.9,
             (0, 255, 0),
             2,
         )
 
     def _draw_press_overlays(self, img, metrics):
         h, _ = img.shape[:2]
-
         cv2.putText(
             img,
-            f"EXT: {metrics['extension_status']} | BACK: {metrics['back_arch_status']}",
+            f"REPS: {metrics.get('reps', 0)} | EXT: {metrics.get('extension_status', 'N/A')} | ARCH: {metrics.get('back_arch_status', 'N/A')}",
             (20, h - 20),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.8,
             (0, 255, 0),
             2,
         )
 
     def _draw_lunge_overlays(self, img, metrics):
         h, _ = img.shape[:2]
-
         cv2.putText(
             img,
-            f"BALANCE: {metrics['balance_status']}",
+            f"REPS: {metrics.get('reps', 0)} | BALANCE: {metrics.get('balance_status', 'N/A')}",
             (20, h - 20),
             cv2.FONT_HERSHEY_SIMPLEX,
-            1,
+            0.8,
             (0, 255, 0),
             2,
         )
@@ -204,24 +208,18 @@ class VideoProcessorClass(VideoProcessorBase):
 
         if result.pose_landmarks:
             landmarks = result.pose_landmarks[0]
-
             self._draw_skeleton(image, landmarks)
 
             ex_type = self.get_exercise()
-
             detector = self._detectors.get(ex_type)
 
             if detector:
                 metrics = detector.process(landmarks)
-
                 metrics["pose_detected"] = True
-
                 self._draw_overlays(image, metrics, ex_type)
-
                 self.set_latest_metrics(metrics)
         else:
             self._draw_no_pose_warnings(image)
-            
             with self._lock:
                 if self._latest_metrics is not None:
                     self._latest_metrics["pose_detected"] = False
@@ -229,4 +227,3 @@ class VideoProcessorClass(VideoProcessorBase):
                     self._latest_metrics = {"pose_detected": False}
 
         return av.VideoFrame.from_ndarray(image, format="bgr24")
-    

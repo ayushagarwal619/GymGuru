@@ -1,20 +1,20 @@
 """
-main.py — GymGuru Dashboard (Restructured Active Focus UI)
+main.py — GymGuru Dashboard (Functionality Stabilization Phase)
 ────────────────────────────────────────────────────────────────────
-ALL logic is 100% unchanged:
-  WebRTC key "exercise-analysis", all st.session_state keys,
-  all widget keys, rep-counting, voice pipeline, persistence.
-Only layout components and rendering functions are updated.
+Stabilized workout engine, timer, rep counting, live angles,
+detector resets, AI coach pipeline, and SQLite persistence.
+Layout, styling, and UI aesthetics remain 100% untouched.
 """
 
 import os
 import time
+import base64
 import pandas as pd
 import streamlit as st
 
 from services.auth.login_wall import render_login_wall
 from services.state.session_defaults import initial_session_defaults
-from services.config.workout_config import EXERCISE_OPTIONS
+from services.config.workout_config import EXERCISE_OPTIONS, METRICS_FIELDS
 from services.ui.style_loader import load_css, inject_local_font, inject_webrtc_styles
 from services.persistence.exercise_repository import init_db, get_users_exercises
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
@@ -24,7 +24,6 @@ from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
-import base64
 
 
 def _get_base64_logo() -> str:
@@ -49,6 +48,9 @@ def _render_top_header(username: str) -> None:
         st.markdown("<div style='height: 0.5rem;'></div>", unsafe_allow_html=True)
         if st.button("← Back to Home", key="back_to_home_btn", use_container_width=True):
             st.session_state.workout_started = False
+            st.session_state.elapsed_seconds = 0
+            st.session_state.reps = 0
+            st.session_state.sets_completed = 0
             st.session_state.user_id = None
             st.session_state.username = None
             st.rerun()
@@ -134,43 +136,45 @@ def _get_posture_status(ex: str) -> tuple[str, str]:
         return "Ready", "posture-ready"
 
     if ex == "Squats":
-        depth = st.session_state.get("depth_status", "")
-        if "Deep" in depth or "Good" in depth:
-            return "Good form", "posture-good"
-        elif depth:
+        depth = st.session_state.get("depth_status", "N/A")
+        if depth in ["GOOD DEPTH", "STANDING"]:
+            return depth, "posture-good"
+        elif depth != "N/A":
             return depth, "posture-warning"
     elif ex == "Push-ups":
-        align = st.session_state.get("body_alignment", "")
-        if "Good" in align or "Straight" in align:
+        align = st.session_state.get("body_alignment", "N/A")
+        hip = st.session_state.get("hip_status", "N/A")
+        if align == "Straight" and hip == "LEVEL":
             return "Good form", "posture-good"
-        elif align:
-            return align, "posture-warning"
+        elif align != "N/A" or hip != "N/A":
+            return f"{align} | {hip}", "posture-warning"
     elif ex == "Biceps Curls (Dumbbell)":
-        swing = st.session_state.get("swing_status", "")
-        if "No Swing" in swing or "Good" in swing:
+        swing = st.session_state.get("swing_status", "N/A")
+        shoulder = st.session_state.get("shoulder_status", "N/A")
+        if swing == "NO SWING" and shoulder == "STABLE":
             return "Good form", "posture-good"
-        elif swing:
-            return swing, "posture-warning"
+        elif swing != "N/A" or shoulder != "N/A":
+            return f"{swing} | {shoulder}", "posture-warning"
     elif ex == "Shoulder Press":
-        arch = st.session_state.get("back_arch_status", "")
-        if "Good" in arch or "Neutral" in arch:
+        arch = st.session_state.get("back_arch_status", "N/A")
+        ext = st.session_state.get("extension_status", "N/A")
+        if arch == "Neutral" and ext in ["FULL EXTENSION", "NEARLY EXTENDED"]:
             return "Good form", "posture-good"
-        elif arch:
-            return arch, "posture-warning"
+        elif arch != "N/A":
+            return f"{ext} | {arch}", "posture-warning"
     elif ex == "Lunges":
-        bal = st.session_state.get("balance_status", "")
-        if "Good" in bal or "Balanced" in bal:
+        bal = st.session_state.get("balance_status", "N/A")
+        if bal == "BALANCED":
             return "Good form", "posture-good"
-        elif bal:
+        elif bal != "N/A":
             return bal, "posture-warning"
 
     return "Tracking active", "posture-good"
 
 
-# ── Sidebar (Navigation & Logout Only) ────────────────────────────────────────
+# ── Sidebar ───────────────────────────────────────────────────────────────────
 def _sidebar(workout_started: bool) -> None:
     with st.sidebar:
-        # Brand
         st.markdown(f"""
 <div class="dev-sidebar-brand">
   <img src="{_LOGO_URI}" class="dev-sidebar-logo" alt="GymGuru Logo" />
@@ -195,13 +199,13 @@ def _sidebar(workout_started: bool) -> None:
 """, unsafe_allow_html=True)
 
         st.divider()
-
-        # Space out and put Logout button at the bottom
         st.markdown("<div style='height: 15rem;'></div>", unsafe_allow_html=True)
+
         if st.button("🚪  Log Out", key="logout_btn", use_container_width=True):
             st.session_state["user_id"]  = None
             st.session_state["username"] = None
             st.session_state["workout_started"] = False
+            st.session_state["elapsed_seconds"] = 0
             st.rerun()
 
 
@@ -210,7 +214,6 @@ def _render_workout_setup(workout_started: bool) -> None:
     st.markdown('<div class="dev-card-title" style="margin-top: 1.5rem; margin-bottom: 0.75rem;">Workout Setup</div>', unsafe_allow_html=True)
     
     with st.container(border=True):
-        # 1. Chips selection row
         st.markdown('<div style="font-size: 0.85rem; color: #9CA3AF; margin-bottom: 0.5rem; font-weight: 600;">1. Select Exercise</div>', unsafe_allow_html=True)
         chip_items = [
             ("🏋️", "Squats"),
@@ -221,8 +224,22 @@ def _render_workout_setup(workout_started: bool) -> None:
         ]
 
         def select_exercise(name):
-            st.session_state["plan_exercise"] = name
-            st.session_state["exercise_type"] = name
+            if st.session_state.get("plan_exercise") != name:
+                st.session_state["plan_exercise"] = name
+                st.session_state["exercise_type"] = name
+                st.session_state["reps"] = 0
+                st.session_state["sets_completed"] = 0
+                st.session_state["current_set_reps"] = 0
+                st.session_state["elapsed_seconds"] = 0
+                st.session_state["workout_started"] = False
+                st.session_state["workout_start_time"] = 0.0
+                st.session_state["set_cycle_started_at"] = 0.0
+                st.session_state["last_saved_sets_completed"] = 0
+                st.session_state["last_notified_workout_complete"] = False
+
+                fields = METRICS_FIELDS.get(name, {})
+                for k, v in fields.items():
+                    st.session_state[k] = v
 
         active_ex = st.session_state.get("plan_exercise", "Squats")
 
@@ -241,34 +258,36 @@ def _render_workout_setup(workout_started: bool) -> None:
                 
         st.markdown('<div style="margin-top: 0.75rem; margin-bottom: 0.75rem; border-top: 1px solid #30363D;"></div>', unsafe_allow_html=True)
 
-        # 2. Sets and Reps selection
         st.markdown('<div style="font-size: 0.85rem; color: #9CA3AF; margin-bottom: 0.5rem; font-weight: 600;">2. Set Targets</div>', unsafe_allow_html=True)
         col_sets, col_reps = st.columns(2)
         with col_sets:
             plan_sets = st.number_input(
-                "Sets Target", min_value=0, max_value=50, key="plan_sets", step=1
+                "Sets Target", min_value=1, max_value=50, key="plan_sets", step=1
             )
         with col_reps:
             plan_reps = st.number_input(
-                "Reps per Set Target", min_value=0, max_value=50, key="plan_reps", step=1
+                "Reps per Set Target", min_value=1, max_value=50, key="plan_reps", step=1
             )
 
         st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
 
-        # 3. Start Workout button
         if not workout_started:
             start_btn = st.button("▶  Start Workout Session", key="setup_start_btn", type="primary", use_container_width=True)
             if start_btn:
+                now_ts = time.time()
                 st.session_state.exercise_type  = active_ex
                 st.session_state.target_sets    = int(plan_sets)
                 st.session_state.reps_per_set   = int(plan_reps)
                 st.session_state.reps           = 0
+                st.session_state.sets_completed = 0
+                st.session_state.current_set_reps = 0
                 st.session_state.workout_started = True
-                st.session_state.set_cycle_started_at      = time.time()
-                st.session_state.elapsed_seconds  = 0
-                st.session_state.last_saved_sets_completed  = 0
+                st.session_state.workout_start_time = now_ts
+                st.session_state.set_cycle_started_at = now_ts
+                st.session_state.elapsed_seconds = 0
+                st.session_state.last_saved_sets_completed = 0
 
-                if st.session_state.voice_pipeline:
+                if st.session_state.get("voice_pipeline"):
                     result = st.session_state.voice_pipeline.process_event(
                         event="workout_started",
                         exercise=active_ex,
@@ -284,8 +303,10 @@ def _render_workout_setup(workout_started: bool) -> None:
         else:
             stop_btn = st.button("⏹  Stop Workout Session", key="setup_stop_btn", use_container_width=True)
             if stop_btn:
+                if st.session_state.get("workout_start_time"):
+                    st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
                 st.session_state.workout_started = False
-                if st.session_state.voice_pipeline:
+                if st.session_state.get("voice_pipeline"):
                     result = st.session_state.voice_pipeline.process_event(
                         event="workout_completed", exercise=active_ex, metrics={}
                     )
@@ -343,14 +364,12 @@ def main():
 
     init_db()
 
-    # Auth gate — login wall logic unchanged
     if not render_login_wall():
         return
 
     initial_session_defaults()
 
-    # Voice pipeline init (logic unchanged)
-    if "voice_pipeline" not in st.session_state:
+    if "voice_pipeline" not in st.session_state or st.session_state.voice_pipeline is None:
         try:
             api_key = os.environ.get("GROQ_API_KEY", "")
             if not api_key and hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
@@ -385,11 +404,12 @@ def main():
     rps     = st.session_state.get("reps_per_set", 10)
     s_done  = st.session_state.get("sets_completed", 0)
     cs_reps = st.session_state.get("current_set_reps", 0)
+
     with col_left:
-        # Elapsed Timer calculation
+        # Reliable timer computation
         elapsed_sec = st.session_state.get("elapsed_seconds", 0)
-        if workout_started and st.session_state.get("set_cycle_started_at"):
-            elapsed_sec = int(time.time() - st.session_state.set_cycle_started_at)
+        if workout_started and st.session_state.get("workout_start_time"):
+            elapsed_sec = int(time.time() - st.session_state.workout_start_time)
             st.session_state.elapsed_seconds = elapsed_sec
 
         m = elapsed_sec // 60
@@ -407,7 +427,6 @@ def main():
 </div>
 """, unsafe_allow_html=True)
 
-        # Camera feed streamer or Offline placeholder
         if not workout_started:
             st.markdown("""
 <div style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 4.5rem 1.5rem; text-align: center; height: 320px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 0.75rem;">
@@ -419,7 +438,6 @@ def main():
 </div>
 """, unsafe_allow_html=True)
         else:
-            # WebRTC streamer — completely unchanged call & key
             context = webrtc_streamer(
                 key="exercise-analysis",
                 mode=WebRtcMode.SENDRECV,
@@ -436,10 +454,12 @@ def main():
             if context.state.playing:
                 time.sleep(0.25)
                 st.rerun()
+            else:
+                time.sleep(1.0)
+                st.rerun()
 
             inject_webrtc_styles()
 
-        # Below camera metadata panel
         posture_text, posture_cls = _get_posture_status(ex)
         st.markdown(f"""
 <div style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
@@ -462,20 +482,23 @@ def main():
 </div>
 """, unsafe_allow_html=True)
 
-        # Prominent camera layout buttons
         if not workout_started:
             start_btn = st.button("▶  Start Workout Session", key="cam_start_btn", type="primary", use_container_width=True)
             if start_btn:
+                now_ts = time.time()
                 st.session_state.exercise_type  = st.session_state.get("plan_exercise", "Squats")
                 st.session_state.target_sets    = int(st.session_state.get("plan_sets", 3))
                 st.session_state.reps_per_set   = int(st.session_state.get("plan_reps", 10))
                 st.session_state.reps           = 0
+                st.session_state.sets_completed = 0
+                st.session_state.current_set_reps = 0
                 st.session_state.workout_started = True
-                st.session_state.set_cycle_started_at      = time.time()
-                st.session_state.elapsed_seconds  = 0
-                st.session_state.last_saved_sets_completed  = 0
+                st.session_state.workout_start_time = now_ts
+                st.session_state.set_cycle_started_at = now_ts
+                st.session_state.elapsed_seconds = 0
+                st.session_state.last_saved_sets_completed = 0
 
-                if st.session_state.voice_pipeline:
+                if st.session_state.get("voice_pipeline"):
                     result = st.session_state.voice_pipeline.process_event(
                         event="workout_started",
                         exercise=st.session_state.exercise_type,
@@ -491,8 +514,10 @@ def main():
         else:
             stop_btn = st.button("⏹  Stop Workout Session", key="cam_stop_btn", use_container_width=True)
             if stop_btn:
+                if st.session_state.get("workout_start_time"):
+                    st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
                 st.session_state.workout_started = False
-                if st.session_state.voice_pipeline:
+                if st.session_state.get("voice_pipeline"):
                     result = st.session_state.voice_pipeline.process_event(
                         event="workout_completed", exercise=ex, metrics={}
                     )
@@ -516,7 +541,6 @@ def main():
         status_text = "Active" if workout_started else "Ready"
         voice_state = ai_status_text
 
-        # Dynamic Form & Mistakes
         alignment_status = "Checking..." if workout_started else "N/A"
         mistakes_status = "None" if workout_started else "N/A"
         ex_active = st.session_state.get("exercise_type", "Squats")
@@ -524,24 +548,27 @@ def main():
         if workout_started:
             if ex_active == "Squats":
                 alignment_status = st.session_state.get("depth_status", "N/A")
-                if "Low" in alignment_status or "Check" in alignment_status:
-                    mistakes_status = "Knee depth low"
+                if alignment_status == "TOO HIGH":
+                    mistakes_status = "Squat depth too high"
             elif ex_active == "Push-ups":
                 alignment_status = st.session_state.get("body_alignment", "N/A")
-                if "Good" not in alignment_status:
-                    mistakes_status = alignment_status
+                hip_align = st.session_state.get("hip_status", "N/A")
+                if alignment_status != "Straight" or hip_align != "LEVEL":
+                    mistakes_status = f"{alignment_status} / {hip_align}"
             elif ex_active == "Biceps Curls (Dumbbell)":
                 alignment_status = st.session_state.get("swing_status", "N/A")
-                if "Swing" in alignment_status:
-                    mistakes_status = "Elbow swing"
+                sh_align = st.session_state.get("shoulder_status", "N/A")
+                if alignment_status == "SWINGING" or sh_align == "ELBOW DRIFTING":
+                    mistakes_status = f"{alignment_status} / {sh_align}"
             elif ex_active == "Shoulder Press":
                 alignment_status = st.session_state.get("back_arch_status", "N/A")
-                if "Arch" in alignment_status:
-                    mistakes_status = "Back arched"
+                ext_align = st.session_state.get("extension_status", "N/A")
+                if alignment_status == "Excessive Arch":
+                    mistakes_status = "Excessive back arch"
             elif ex_active == "Lunges":
                 alignment_status = st.session_state.get("balance_status", "N/A")
-                if "Good" not in alignment_status:
-                    mistakes_status = alignment_status
+                if alignment_status == "OFF BALANCE":
+                    mistakes_status = "Off balance"
 
         st.markdown(f"""
 <div class="dev-card" style="margin-bottom: 1rem;">
@@ -560,7 +587,7 @@ def main():
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363D; padding-bottom: 0.5rem;">
       <span style="font-size: 0.85rem; color: #9CA3AF; font-weight: 600;">Form Issues / Mistakes</span>
-      <span style="font-size: 0.85rem; font-weight: 700; color: {'#F59E0B' if mistakes_status != 'None' and mistakes_status != 'N/A' else '#22C55E'};">{mistakes_status}</span>
+      <span style="font-size: 0.85rem; font-weight: 700; color: {'#F59E0B' if mistakes_status not in ['None', 'N/A'] else '#22C55E'};">{mistakes_status}</span>
     </div>
   </div>
 
@@ -571,7 +598,6 @@ def main():
 </div>
 """, unsafe_allow_html=True)
 
-        # Real-time metrics breakdown in right side
         if workout_started:
             st.markdown('<div class="dev-card-title" style="font-size: 0.88rem; margin-bottom: 0.5rem;">Real-Time Pose Metrics</div>', unsafe_allow_html=True)
             m_col1, m_col2, m_col3 = st.columns(3)
@@ -616,21 +642,18 @@ def main():
                 with m_col3:
                     st.metric("Balance", st.session_state.get("balance_status", "N/A"))
 
-    # Audio Autoplay (logic unchanged)
     if st.session_state.get("audio_to_play"):
         autoplay_audio(st.session_state.audio_to_play)
+        st.session_state.audio_to_play = None
 
-    # Third Row: Workout Setup (Exercise Chips, Target selectbox, Sets and Reps, Start)
     _render_workout_setup(workout_started)
 
-    # Fourth Row: Workout History Table
     if isinstance(user_id, int):
         _render_history_table(user_id)
 
-    # Bottom Footer
     st.markdown("""
 <div class="dev-footer">
-  <div class="dev-footer-copy">GymGuru &copy; 2025 &nbsp;·&nbsp; AI Fitness Coach &nbsp;·&nbsp; Data stored locally in SQLite</div>
+  <div class="dev-footer-copy">GymGuru &copy; 2026 &nbsp;·&nbsp; AI Fitness Coach &nbsp;·&nbsp; Data stored locally in SQLite</div>
   <div class="dev-tech-chips">
     <span class="dev-tech-chip">Python 3.11</span>
     <span class="dev-tech-chip">MediaPipe Pose</span>

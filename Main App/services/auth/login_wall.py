@@ -1,5 +1,5 @@
 """
-login_wall.py — GymGuru Landing / Login Page (Hero Redesign Strict Phase)
+login_wall.py — GymGuru Landing / Login Page (Hero & Quote Carousel Polish)
 ───────────────────────────────────────────────────────────────────
 Auth logic is 100% unchanged: get_or_create_user(), session_state
 keys "user_id" / "username", form key "login_form" — preserved.
@@ -8,6 +8,7 @@ keys "user_id" / "username", form key "login_form" — preserved.
 import base64
 import os
 import streamlit as st
+import streamlit.components.v1 as components
 from services.persistence.exercise_repository import get_or_create_user
 
 def _get_base64_logo() -> str:
@@ -118,41 +119,290 @@ def _hero_left() -> None:
     st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
 
 
-# ── Section 3: Interactive Quote Carousel ────────────────────────────────────
+# ── Section 3: Interactive Quote Carousel (Component Execution) ─────────────
 def _quotes() -> None:
-    html = """
+    carousel_html = """
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  body { background: transparent; color: #FFFFFF; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+  
+  .gg-quote-card-v3 {
+    background: rgba(22, 27, 34, 0.85);
+    border: 1px solid #30363D;
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    user-select: none;
+  }
+  
+  .gg-quote-carousel-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .gg-quote-nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #30363D;
+    color: #E6EDF3;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .gg-quote-nav-btn:hover {
+    background: #7C5CFF;
+    border-color: #7C5CFF;
+    color: #FFFFFF;
+    transform: scale(1.08);
+  }
+  
+  .quote-display-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+  }
+  
+  .gg-quote-qmark {
+    font-size: 2rem;
+    color: #7C5CFF;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0.75;
+  }
+  
+  .gg-quote-text-v3 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .gg-quote-text-v3.fade-out {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  
+  .gg-quote-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+  }
+  
+  .gg-quote-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .gg-quote-dot.active {
+    width: 22px;
+    border-radius: 12px;
+    background: #7C5CFF;
+    box-shadow: 0 0 10px rgba(124, 92, 255, 0.6);
+  }
+  .gg-quote-dot:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  
+  .gg-quote-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+  
+  .gg-quote-pill-item {
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #8B949E;
+    padding: 0.3rem 0.75rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .gg-quote-pill-item:hover {
+    background: rgba(124, 92, 255, 0.15);
+    border-color: #7C5CFF;
+    color: #FFFFFF;
+  }
+  .gg-quote-pill-item.active-pill {
+    background: rgba(124, 92, 255, 0.25);
+    border-color: #7C5CFF;
+    color: #A78BFA;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
 <div class="gg-quote-card-v3" id="gg-quote-container">
   <div class="gg-quote-carousel-wrap">
-    <button class="gg-quote-nav-btn" id="gg-quote-prev">‹</button>
-    <div>
+    <button class="gg-quote-nav-btn" id="gg-quote-prev" title="Previous Quote (←)">‹</button>
+    <div class="quote-display-box">
       <span class="gg-quote-qmark">“</span>
       <h2 class="gg-quote-text-v3" id="gg-quote-text">Discipline Beats Motivation.</h2>
       <span class="gg-quote-qmark">”</span>
     </div>
-    <button class="gg-quote-nav-btn" id="gg-quote-next">›</button>
+    <button class="gg-quote-nav-btn" id="gg-quote-next" title="Next Quote (→)">›</button>
   </div>
   
-  <div class="gg-quote-dots" id="gg-quote-dots-container">
-    <div class="gg-quote-dot active"></div>
-    <div class="gg-quote-dot"></div>
-    <div class="gg-quote-dot"></div>
-    <div class="gg-quote-dot"></div>
-    <div class="gg-quote-dot"></div>
-  </div>
+  <div class="gg-quote-dots" id="gg-quote-dots-container"></div>
 
-  <div class="gg-quote-pills-row">
-    <div class="gg-quote-pill-item">Perfect Form Creates Perfect Results.</div>
-    <div class="gg-quote-pill-item">Train Smarter, Not Harder.</div>
-    <div class="gg-quote-pill-item">Consistency Builds Champions.</div>
-    <div class="gg-quote-pill-item">Your Form Is Your Foundation.</div>
-    <div class="gg-quote-pill-item">Every Rep Counts.</div>
-    <div class="gg-quote-pill-item">Stronger Today, Better Tomorrow.</div>
-    <div class="gg-quote-pill-item">Focus. Form. Finish.</div>
-    <div class="gg-quote-pill-item">Small Progress, Big Results.</div>
-  </div>
+  <div class="gg-quote-pills-row" id="gg-quote-pills-container"></div>
 </div>
+
+<script>
+  const quotes = [
+    "Discipline Beats Motivation.",
+    "Every Rep Counts.",
+    "Train Smarter, Not Harder.",
+    "Perfect Form Creates Perfect Results.",
+    "Consistency Wins.",
+    "Your Form Is Your Foundation.",
+    "Strength Is Earned.",
+    "Progress Over Perfection.",
+    "Small Improvements Every Day.",
+    "Trust the Process."
+  ];
+
+  let currentIndex = 0;
+  let timer = null;
+
+  const quoteText = document.getElementById("gg-quote-text");
+  const dotsContainer = document.getElementById("gg-quote-dots-container");
+  const pillsContainer = document.getElementById("gg-quote-pills-container");
+  const container = document.getElementById("gg-quote-container");
+
+  function initUI() {
+    // Render Dots
+    dotsContainer.innerHTML = quotes.map((_, i) => 
+      `<div class="gg-quote-dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>`
+    ).join("");
+
+    // Render Pills
+    pillsContainer.innerHTML = quotes.map((q, i) => 
+      `<div class="gg-quote-pill-item ${i === 0 ? 'active-pill' : ''}" data-idx="${i}">${q}</div>`
+    ).join("");
+  }
+
+  function renderQuote(index) {
+    currentIndex = (index + quotes.length) % quotes.length;
+    
+    // Fade out
+    quoteText.classList.add("fade-out");
+    
+    setTimeout(() => {
+      quoteText.innerText = quotes[currentIndex];
+      
+      // Update Dots
+      const dots = dotsContainer.children;
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.toggle("active", i === currentIndex);
+      }
+
+      // Update Pills
+      const pills = pillsContainer.children;
+      for (let i = 0; i < pills.length; i++) {
+        pills[i].classList.toggle("active-pill", i === currentIndex);
+      }
+
+      // Fade in
+      quoteText.classList.remove("fade-out");
+    }, 300);
+  }
+
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(() => {
+      renderQuote(currentIndex + 1);
+    }, 3000);
+  }
+
+  function stopTimer() {
+    if (timer) clearInterval(timer);
+  }
+
+  // Event Handlers
+  document.getElementById("gg-quote-prev").addEventListener("click", () => {
+    renderQuote(currentIndex - 1);
+    startTimer();
+  });
+
+  document.getElementById("gg-quote-next").addEventListener("click", () => {
+    renderQuote(currentIndex + 1);
+    startTimer();
+  });
+
+  dotsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("gg-quote-dot")) {
+      const idx = parseInt(e.target.getAttribute("data-idx"));
+      renderQuote(idx);
+      startTimer();
+    }
+  });
+
+  pillsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("gg-quote-pill-item")) {
+      const idx = parseInt(e.target.getAttribute("data-idx"));
+      renderQuote(idx);
+      startTimer();
+    }
+  });
+
+  // Keyboard Controls (←, →)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      renderQuote(currentIndex - 1);
+      startTimer();
+    } else if (e.key === "ArrowRight") {
+      renderQuote(currentIndex + 1);
+      startTimer();
+    }
+  });
+
+  // Hover Pause & Resume
+  container.addEventListener("mouseenter", stopTimer);
+  container.addEventListener("mouseleave", startTimer);
+
+  // Initialize
+  initUI();
+  startTimer();
+</script>
+
+</body>
+</html>
 """
-    st.markdown(html.replace('\n', ''), unsafe_allow_html=True)
+    components.html(carousel_html, height=230)
 
 
 # ── Section 4: Supported Exercises Grid ───────────────────────────────────────
@@ -544,77 +794,5 @@ def render_login_wall() -> bool:
 
     # 10. Footer
     _footer()
-
-    # Interactive Quote Carousel Script
-    carousel_script = """
-<script>
-(function() {
-  const quotes = [
-    "Discipline Beats Motivation.",
-    "Perfect Form Creates Perfect Results.",
-    "Train Smarter, Not Harder.",
-    "Consistency Builds Champions.",
-    "Your Form Is Your Foundation.",
-    "Every Rep Counts.",
-    "Stronger Today, Better Tomorrow.",
-    "Focus. Form. Finish.",
-    "Small Progress, Big Results.",
-    "Push Your Limits Daily."
-  ];
-
-  let currentIdx = 0;
-  let timer = null;
-
-  function updateQuote(index) {
-    currentIdx = (index + quotes.length) % quotes.length;
-    const qText = document.getElementById("gg-quote-text");
-    if (qText) {
-      qText.style.opacity = 0;
-      setTimeout(() => {
-        qText.innerText = quotes[currentIdx];
-        qText.style.opacity = 1;
-      }, 200);
-    }
-  }
-
-  function startTimer() {
-    stopTimer();
-    timer = setInterval(() => {
-      updateQuote(currentIdx + 1);
-    }, 3000);
-  }
-
-  function stopTimer() {
-    if (timer) clearInterval(timer);
-  }
-
-  document.addEventListener("click", function(e) {
-    if (e.target && e.target.id === "gg-quote-prev") {
-      updateQuote(currentIdx - 1);
-      startTimer();
-    } else if (e.target && e.target.id === "gg-quote-next") {
-      updateQuote(currentIdx + 1);
-      startTimer();
-    } else if (e.target && e.target.classList.contains("gg-quote-pill-item")) {
-      const txt = e.target.innerText;
-      const idx = quotes.indexOf(txt);
-      if (idx !== -1) {
-        updateQuote(idx);
-        startTimer();
-      }
-    }
-  });
-
-  const container = document.getElementById("gg-quote-container");
-  if (container) {
-    container.addEventListener("mouseenter", stopTimer);
-    container.addEventListener("mouseleave", startTimer);
-  }
-
-  startTimer();
-})();
-</script>
-"""
-    st.markdown(carousel_script.replace('\n', ''), unsafe_allow_html=True)
 
     return False

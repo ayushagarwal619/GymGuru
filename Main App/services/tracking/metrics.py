@@ -9,40 +9,37 @@ def sync_metrics_update(context):
         return
     
     processor = getattr(context, "video_processor", None)
-
     if not processor:
         return 
     
     exercise = st.session_state.get("exercise_type")
-
     if not exercise:
         return
     
     processor.set_exercise(exercise)
-    latest_metrics = processor.get_latest_metrics()
 
+    if not st.session_state.get("workout_started", False):
+        return
+
+    latest_metrics = processor.get_latest_metrics()
     if not latest_metrics:
         return
     
     reps = latest_metrics.get("reps", 0)
-
     if reps is None:
         reps = 0
         
     st.session_state.reps = reps
 
     fields = METRICS_FIELDS.get(exercise)
-
-    if not fields:
-        return 
-
-    for key, default in fields.items():
-        st.session_state[key] = latest_metrics.get(key, default)
+    if fields:
+        for key, default in fields.items():
+            st.session_state[key] = latest_metrics.get(key, default)
 
     reps_per_set = st.session_state.get("reps_per_set", 0)
     target_sets = st.session_state.get("target_sets", 0)
 
-    if reps is not None and reps_per_set > 0 and target_sets > 0:
+    if reps_per_set > 0 and target_sets > 0:
         sets_completed = reps // reps_per_set
         current_set_reps = reps % reps_per_set
         workout_completed = sets_completed >= target_sets 
@@ -61,10 +58,11 @@ def sync_metrics_update(context):
         newly_completed = sets_completed - last_saved_sets
         now_ts = time.time()
         started_at = st.session_state.get("set_cycle_started_at", now_ts)
-        time_taken = now_ts - started_at
+        time_taken = max(1, int(now_ts - started_at))
         user_id = st.session_state.get("user_id", 0)
 
-        add_exercise(user_id, exercise, newly_completed * reps_per_set, newly_completed, time_taken)
+        if user_id:
+            add_exercise(user_id, exercise, newly_completed * reps_per_set, newly_completed, time_taken)
 
         if st.session_state.get("voice_pipeline"):
             result = st.session_state.voice_pipeline.process_event(
@@ -72,7 +70,6 @@ def sync_metrics_update(context):
                 exercise=exercise,
                 metrics=latest_metrics,
             )
-
             if result:
                 st.session_state.audio_to_play, st.session_state.coach_feedback = result
 
@@ -81,26 +78,22 @@ def sync_metrics_update(context):
 
     if workout_completed and not st.session_state.get("last_notified_workout_complete", False):
         st.session_state.last_notified_workout_complete = True
-
         if st.session_state.get("voice_pipeline"):
             result = st.session_state.voice_pipeline.process_event(
                 event="workout_completed",
                 exercise=exercise,
                 metrics=latest_metrics,
             )
-
             if result:
                 st.session_state.audio_to_play, st.session_state.coach_feedback = result
                 
     pose_detected = latest_metrics.get("pose_detected", True)
-    
     if not pose_detected and st.session_state.get("voice_pipeline"):
         result = st.session_state.voice_pipeline.process_event(
             event="no_pose_detected",
             exercise=exercise,
             metrics={"issue": "No pose detected! Please step into the camera frame."},
         )
-    
         if result:
             st.session_state.audio_to_play, st.session_state.coach_feedback = result
 
@@ -110,6 +103,5 @@ def sync_metrics_update(context):
             exercise=exercise,
             metrics=latest_metrics,
         )
-        
         if result:
             st.session_state.audio_to_play, st.session_state.coach_feedback = result

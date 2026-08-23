@@ -4,21 +4,24 @@ import streamlit as st
 def initial_session_defaults():
     defaults = {
         "reps": 0,
-        "target_sets": 0,
-        "reps_per_set": 0,
+        "target_sets": 3,
+        "reps_per_set": 10,
         "sets_completed": 0,
         "current_set_reps": 0,
         "workout_complete": False,
+        "workout_completed": False,
         "last_notified_sets_completed": 0,
         "last_notified_workout_complete": False,
         "last_saved_sets_completed": 0,
         "set_cycle_started_at": 0.0,
+        "workout_start_time": 0.0,
         "elapsed_seconds": 0,
         "last_exercise_type": "Squats",
 
         # Workout plan (set before starting)
         "workout_started": False,
         "plan_exercise": "Squats",
+        "exercise_type": "Squats",
         "plan_sets": 3,
         "plan_reps": 10,
 
@@ -38,6 +41,8 @@ def initial_session_defaults():
         "extension_status": "N/A",
         "back_arch_status": "N/A",
         "balance_status": "N/A",
+        "audio_to_play": None,
+        "coach_feedback": "",
     }
 
     for key, value in defaults.items():
