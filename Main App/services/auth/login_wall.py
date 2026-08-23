@@ -402,7 +402,9 @@ def _quotes() -> None:
 </body>
 </html>
 """
-    components.html(carousel_html, height=230)
+    st.markdown('<div class="gg-landing-v3-root" style="margin-top: 3.5rem; margin-bottom: 2rem; display: flex; justify-content: center; width: 100%;">', unsafe_allow_html=True)
+    components.html(carousel_html, height=240)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ── Section 4: Supported Exercises Grid ───────────────────────────────────────
@@ -552,7 +554,7 @@ def _features() -> None:
     <h2 class="gg-section-title-v3">Core Features</h2>
     <p class="gg-section-desc-v3">Advanced tools designed to deliver professional-grade training guidance</p>
   </div>
-  <div class="gg-features-5grid-ref">
+  <div class="gg-features-layout-ref">
     {cards_html}
   </div>
 </div>

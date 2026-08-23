@@ -5,12 +5,24 @@ import base64
  
 
 def load_css(file_path):
+    if not os.path.exists(file_path):
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        alt_path = os.path.join(base_dir, "static", os.path.basename(file_path))
+        if os.path.exists(alt_path):
+            file_path = alt_path
+
     if os.path.exists(file_path):
-        with open(file_path) as f:
+        with open(file_path, encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
 def inject_local_font(font_path, font_name):
+    if not os.path.exists(font_path):
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        alt_path = os.path.join(base_dir, "static", os.path.basename(font_path))
+        if os.path.exists(alt_path):
+            font_path = alt_path
+
     if not os.path.exists(font_path):
         return
     
@@ -33,7 +45,10 @@ def inject_local_font(font_path, font_name):
     """, unsafe_allow_html=True)
 
 def inject_webrtc_styles():
-    font_path = os.path.join(os.getcwd(), "static", "AdobeClean.otf")
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    font_path = os.path.join(base_dir, "static", "AdobeClean.otf")
+    if not os.path.exists(font_path):
+        font_path = os.path.join(os.getcwd(), "static", "AdobeClean.otf")
     
     if not os.path.exists(font_path):
         return

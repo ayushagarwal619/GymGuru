@@ -72,6 +72,66 @@ def _render_top_header(username: str) -> None:
     st.markdown('<div style="border-bottom: 1px solid #30363D; margin-bottom: 1.5rem; margin-top: 0.5rem;"></div>', unsafe_allow_html=True)
 
 
+def _start_workout_session() -> None:
+    ex = st.session_state.get("plan_exercise") or st.session_state.get("exercise_type") or "Squats"
+    target_sets = int(st.session_state.get("plan_sets", 3))
+    reps_per_set = int(st.session_state.get("plan_reps", 10))
+
+    now_ts = time.time()
+    st.session_state.exercise_type = ex
+    st.session_state.plan_exercise = ex
+    st.session_state.target_sets = target_sets
+    st.session_state.reps_per_set = reps_per_set
+    st.session_state.reps = 0
+    st.session_state.sets_completed = 0
+    st.session_state.current_set_reps = 0
+    st.session_state.workout_started = True
+    st.session_state.workout_completed = False
+    st.session_state.workout_start_time = now_ts
+    st.session_state.set_cycle_started_at = now_ts
+    st.session_state.elapsed_seconds = 0
+    st.session_state.last_saved_sets_completed = 0
+    st.session_state.last_notified_sets_completed = 0
+    st.session_state.last_notified_workout_complete = False
+
+    fields = METRICS_FIELDS.get(ex, {})
+    for k, v in fields.items():
+        st.session_state[k] = v
+
+    if st.session_state.get("voice_pipeline"):
+        try:
+            result = st.session_state.voice_pipeline.process_event(
+                event="workout_started",
+                exercise=ex,
+                metrics={},
+            )
+            if result:
+                st.session_state.audio_to_play = result[0]
+                st.session_state.coach_feedback = result[1]
+        except Exception:
+            st.session_state.coach_feedback = f"Workout session started for {ex}. AI Coach is analyzing form."
+    else:
+        st.session_state.coach_feedback = f"Workout session started for {ex}. AI Coach is ready."
+
+
+def _stop_workout_session() -> None:
+    if st.session_state.get("workout_start_time"):
+        st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
+    st.session_state.workout_started = False
+    st.session_state.workout_start_time = 0.0
+    ex = st.session_state.get("exercise_type", "Squats")
+    if st.session_state.get("voice_pipeline"):
+        try:
+            result = st.session_state.voice_pipeline.process_event(
+                event="workout_completed", exercise=ex, metrics={}
+            )
+            if result:
+                st.session_state.audio_to_play = result[0]
+                st.session_state.coach_feedback = result[1]
+        except Exception:
+            st.session_state.coach_feedback = f"Workout session completed for {ex}."
+
+
 # ── Stat Cards (First Row - ONLY actual metrics) ──────────────────────────────
 def _render_stat_cards(user_id: int, workout_started: bool) -> None:
     rows = get_users_exercises(user_id) if user_id else []
@@ -81,11 +141,15 @@ def _render_stat_cards(user_id: int, workout_started: bool) -> None:
     
     t_sets = st.session_state.get("target_sets", 3)
     s_done = st.session_state.get("sets_completed", 0)
-    sets_val = f"{s_done} / {t_sets}"
-
     rps = st.session_state.get("reps_per_set", 10)
     cs_reps = st.session_state.get("current_set_reps", 0)
-    reps_val = f"{cs_reps} / {rps}"
+
+    if st.session_state.get("workout_completed", False):
+        sets_val = f"{t_sets} / {t_sets} ✓"
+        reps_val = f"{rps} / {rps} ✓"
+    else:
+        sets_val = f"{s_done} / {t_sets}"
+        reps_val = f"{cs_reps} / {rps}"
 
     col1, col2, col3, col4 = st.columns(4)
 
@@ -128,10 +192,14 @@ def _get_ai_status(speaking: bool) -> tuple[str, str]:
         return "Speaking", "status-speaking"
     elif st.session_state.get("workout_started", False):
         return "Listening", "status-listening"
+    elif st.session_state.get("workout_completed", False):
+        return "Complete", "status-listening"
     return "Idle", "status-idle"
 
 
 def _get_posture_status(ex: str) -> tuple[str, str]:
+    if st.session_state.get("workout_completed", False):
+        return "Completed", "posture-good"
     if not st.session_state.get("workout_started", False):
         return "Ready", "posture-ready"
 
@@ -205,6 +273,7 @@ def _sidebar(workout_started: bool) -> None:
             st.session_state["user_id"]  = None
             st.session_state["username"] = None
             st.session_state["workout_started"] = False
+            st.session_state["workout_completed"] = False
             st.session_state["elapsed_seconds"] = 0
             st.rerun()
 
@@ -232,6 +301,7 @@ def _render_workout_setup(workout_started: bool) -> None:
                 st.session_state["current_set_reps"] = 0
                 st.session_state["elapsed_seconds"] = 0
                 st.session_state["workout_started"] = False
+                st.session_state["workout_completed"] = False
                 st.session_state["workout_start_time"] = 0.0
                 st.session_state["set_cycle_started_at"] = 0.0
                 st.session_state["last_saved_sets_completed"] = 0
@@ -272,82 +342,59 @@ def _render_workout_setup(workout_started: bool) -> None:
         st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
 
         if not workout_started:
-            start_btn = st.button("▶  Start Workout Session", key="setup_start_btn", type="primary", use_container_width=True)
-            if start_btn:
-                now_ts = time.time()
-                st.session_state.exercise_type  = active_ex
-                st.session_state.target_sets    = int(plan_sets)
-                st.session_state.reps_per_set   = int(plan_reps)
-                st.session_state.reps           = 0
-                st.session_state.sets_completed = 0
-                st.session_state.current_set_reps = 0
-                st.session_state.workout_started = True
-                st.session_state.workout_start_time = now_ts
-                st.session_state.set_cycle_started_at = now_ts
-                st.session_state.elapsed_seconds = 0
-                st.session_state.last_saved_sets_completed = 0
-
-                if st.session_state.get("voice_pipeline"):
-                    result = st.session_state.voice_pipeline.process_event(
-                        event="workout_started",
-                        exercise=active_ex,
-                        metrics={},
-                    )
-                    if result:
-                        st.session_state.audio_to_play   = result[0]
-                        st.session_state.coach_feedback  = result[1]
-
-                st.session_state.last_notified_sets_completed    = 0
-                st.session_state.last_notified_workout_complete  = False
-                st.rerun()
+            st.button("▶  Start Workout Session", key="setup_start_btn", type="primary", on_click=_start_workout_session, use_container_width=True)
         else:
-            stop_btn = st.button("⏹  Stop Workout Session", key="setup_stop_btn", use_container_width=True)
-            if stop_btn:
-                if st.session_state.get("workout_start_time"):
-                    st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
-                st.session_state.workout_started = False
-                if st.session_state.get("voice_pipeline"):
-                    result = st.session_state.voice_pipeline.process_event(
-                        event="workout_completed", exercise=active_ex, metrics={}
-                    )
-                    if result:
-                        st.session_state.audio_to_play  = result[0]
-                        st.session_state.coach_feedback = result[1]
-                st.rerun()
+            st.button("⏹  Stop Workout Session", key="setup_stop_btn", on_click=_stop_workout_session, use_container_width=True)
 
 
 # ── Workout History Table (Row 4) ─────────────────────────────────────────────
 def _render_history_table(user_id: int) -> None:
-    st.markdown('<div class="dev-card-title" style="margin: 1.5rem 0 0.75rem;">Workout History</div>', unsafe_allow_html=True)
+    col_hdr, col_exp = st.columns([3, 1])
+    with col_hdr:
+        st.markdown('<div class="dev-card-title" style="margin: 1.5rem 0 0.75rem;">Workout History</div>', unsafe_allow_html=True)
 
     rows = get_users_exercises(user_id) if user_id else []
-    if not rows:
+
+    if rows:
+        arr = []
+        for r in rows:
+            row_dict = dict(r) if hasattr(r, "keys") else r
+            created_at = row_dict.get("created_at", "")
+            duration_sec = row_dict.get("time", 0)
+            m = int(duration_sec // 60)
+            s = int(duration_sec % 60)
+            dur_str = f"{m}m {s}s" if m else f"{s}s"
+
+            arr.append({
+                "Date": created_at[:16] if created_at else "",
+                "Exercise": row_dict.get("exercise_name", ""),
+                "Sets": row_dict.get("sets", 0),
+                "Reps": row_dict.get("reps", 0),
+                "Duration": dur_str,
+            })
+
+        df = pd.DataFrame(arr)
+        with col_exp:
+            st.markdown('<div style="height: 1.5rem;"></div>', unsafe_allow_html=True)
+            csv_data = df.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label="📥 Export CSV",
+                data=csv_data,
+                file_name=f"gymguru_workout_history.csv",
+                mime="text/csv",
+                key="export_csv_btn",
+                use_container_width=True,
+            )
+        st.dataframe(df, use_container_width=True, hide_index=True)
+    else:
+        with col_exp:
+            st.markdown('<div style="height: 1.5rem;"></div>', unsafe_allow_html=True)
+            st.button("📥 Export CSV", key="export_csv_disabled", disabled=True, use_container_width=True)
         st.markdown("""
 <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 2rem; text-align: center; color: #9CA3AF; font-size: 0.88rem;">
   No workouts recorded yet. Start a session to log metrics into SQLite.
 </div>
 """, unsafe_allow_html=True)
-        return
-
-    arr = []
-    for r in rows:
-        row_dict = dict(r) if hasattr(r, "keys") else r
-        created_at = row_dict.get("created_at", "")
-        duration_sec = row_dict.get("time", 0)
-        m = int(duration_sec // 60)
-        s = int(duration_sec % 60)
-        dur_str = f"{m}m {s}s" if m else f"{s}s"
-
-        arr.append({
-            "Date": created_at[:16] if created_at else "",
-            "Exercise": row_dict.get("exercise_name", ""),
-            "Sets": row_dict.get("sets", 0),
-            "Reps": row_dict.get("reps", 0),
-            "Duration": dur_str,
-        })
-
-    df = pd.DataFrame(arr)
-    st.dataframe(df, use_container_width=True, hide_index=True)
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -359,8 +406,9 @@ def main():
         layout="wide",
     )
 
-    load_css(os.path.join(os.getcwd(), "static", "style.css"))
-    inject_local_font(os.path.join(os.getcwd(), "static", "AdobeClean.otf"), "AdobeClean")
+    base_dir = os.path.dirname(os.abspath(__file__)) if hasattr(os, 'abspath') else os.path.dirname(__file__)
+    load_css(os.path.join(base_dir, "static", "style.css"))
+    inject_local_font(os.path.join(base_dir, "static", "AdobeClean.otf"), "AdobeClean")
 
     init_db()
 
@@ -396,8 +444,8 @@ def main():
 
     st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
 
-    # Second Row: Camera (70%) & AI Coach (30%)
-    col_left, col_right = st.columns([1.3, 1.0], gap="large")
+    # Second Row: Camera (68%) & AI Coach (32%)
+    col_left, col_right = st.columns([2.1, 1.0], gap="large")
 
     ex      = st.session_state.get("exercise_type", st.session_state.get("plan_exercise", "Squats"))
     t_sets  = st.session_state.get("target_sets", 3)
@@ -427,7 +475,20 @@ def main():
 </div>
 """, unsafe_allow_html=True)
 
-        if not workout_started:
+        if st.session_state.get("workout_completed", False) and not workout_started:
+            st.markdown(f"""
+<div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(13, 17, 23, 0.85) 100%); border: 1px solid #22C55E; border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+  <div>
+    <div style="font-size: 1.15rem; font-weight: 800; color: #22C55E;">🎉 Workout Completed!</div>
+    <div style="font-size: 0.85rem; color: #E6EDF3; margin-top: 0.25rem;">Great job! Reached target of <strong>{t_sets} sets × {rps} reps</strong> for <strong>{ex}</strong>.</div>
+  </div>
+  <div style="text-align: right;">
+    <div style="font-size: 0.75rem; color: #9CA3AF; text-transform: uppercase; font-weight: 600;">Total Duration</div>
+    <div style="font-size: 1.2rem; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono);">⏱ {elapsed_str}</div>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+        elif not workout_started:
             st.markdown("""
 <div style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 4.5rem 1.5rem; text-align: center; height: 320px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 0.75rem;">
   <div style="font-size: 2.2rem; margin-bottom: 0.75rem; opacity: 0.5;">📷</div>
@@ -483,48 +544,9 @@ def main():
 """, unsafe_allow_html=True)
 
         if not workout_started:
-            start_btn = st.button("▶  Start Workout Session", key="cam_start_btn", type="primary", use_container_width=True)
-            if start_btn:
-                now_ts = time.time()
-                st.session_state.exercise_type  = st.session_state.get("plan_exercise", "Squats")
-                st.session_state.target_sets    = int(st.session_state.get("plan_sets", 3))
-                st.session_state.reps_per_set   = int(st.session_state.get("plan_reps", 10))
-                st.session_state.reps           = 0
-                st.session_state.sets_completed = 0
-                st.session_state.current_set_reps = 0
-                st.session_state.workout_started = True
-                st.session_state.workout_start_time = now_ts
-                st.session_state.set_cycle_started_at = now_ts
-                st.session_state.elapsed_seconds = 0
-                st.session_state.last_saved_sets_completed = 0
-
-                if st.session_state.get("voice_pipeline"):
-                    result = st.session_state.voice_pipeline.process_event(
-                        event="workout_started",
-                        exercise=st.session_state.exercise_type,
-                        metrics={},
-                    )
-                    if result:
-                        st.session_state.audio_to_play   = result[0]
-                        st.session_state.coach_feedback  = result[1]
-
-                st.session_state.last_notified_sets_completed    = 0
-                st.session_state.last_notified_workout_complete  = False
-                st.rerun()
+            st.button("▶  Start Workout Session", key="cam_start_btn", type="primary", on_click=_start_workout_session, use_container_width=True)
         else:
-            stop_btn = st.button("⏹  Stop Workout Session", key="cam_stop_btn", use_container_width=True)
-            if stop_btn:
-                if st.session_state.get("workout_start_time"):
-                    st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
-                st.session_state.workout_started = False
-                if st.session_state.get("voice_pipeline"):
-                    result = st.session_state.voice_pipeline.process_event(
-                        event="workout_completed", exercise=ex, metrics={}
-                    )
-                    if result:
-                        st.session_state.audio_to_play  = result[0]
-                        st.session_state.coach_feedback = result[1]
-                st.rerun()
+            st.button("⏹  Stop Workout Session", key="cam_stop_btn", on_click=_stop_workout_session, use_container_width=True)
 
     with col_right:
         st.markdown('<div class="dev-card-title" style="margin-bottom: 0.75rem;">AI Coach</div>', unsafe_allow_html=True)
