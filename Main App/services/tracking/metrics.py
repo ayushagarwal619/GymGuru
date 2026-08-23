@@ -21,6 +21,11 @@ def sync_metrics_update(context):
     if not st.session_state.get("workout_started", False):
         return
 
+    if st.session_state.get("workout_start_time", 0.0) == 0.0:
+        now_ts = time.time()
+        st.session_state.workout_start_time = now_ts
+        st.session_state.set_cycle_started_at = now_ts
+
     latest_metrics = processor.get_latest_metrics()
     if not latest_metrics:
         return
@@ -87,9 +92,13 @@ def sync_metrics_update(context):
     if workout_completed and not st.session_state.get("last_notified_workout_complete", False):
         st.session_state.last_notified_workout_complete = True
         st.session_state.workout_started = False
-        if st.session_state.get("workout_start_time"):
-            st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
-            st.session_state.workout_start_time = 0.0
+        start_time = st.session_state.get("workout_start_time", 0.0)
+        if isinstance(start_time, (int, float)) and start_time > 0.0:
+            try:
+                st.session_state.elapsed_seconds = int(time.time() - start_time)
+            except Exception:
+                pass
+        st.session_state.workout_start_time = 0.0
 
         if st.session_state.get("voice_pipeline"):
             result = st.session_state.voice_pipeline.process_event(

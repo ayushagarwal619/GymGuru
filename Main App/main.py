@@ -86,9 +86,10 @@ def _start_workout_session() -> None:
     st.session_state.sets_completed = 0
     st.session_state.current_set_reps = 0
     st.session_state.workout_started = True
+    st.session_state.scroll_to_camera = True
     st.session_state.workout_completed = False
-    st.session_state.workout_start_time = now_ts
-    st.session_state.set_cycle_started_at = now_ts
+    st.session_state.workout_start_time = 0.0
+    st.session_state.set_cycle_started_at = 0.0
     st.session_state.elapsed_seconds = 0
     st.session_state.last_saved_sets_completed = 0
     st.session_state.last_notified_sets_completed = 0
@@ -115,9 +116,13 @@ def _start_workout_session() -> None:
 
 
 def _stop_workout_session() -> None:
-    if st.session_state.get("workout_start_time"):
-        st.session_state.elapsed_seconds = int(time.time() - st.session_state.workout_start_time)
     st.session_state.workout_started = False
+    start_time = st.session_state.get("workout_start_time", 0.0)
+    if isinstance(start_time, (int, float)) and start_time > 0.0:
+        try:
+            st.session_state.elapsed_seconds = int(time.time() - start_time)
+        except Exception:
+            pass
     st.session_state.workout_start_time = 0.0
     ex = st.session_state.get("exercise_type", "Squats")
     if st.session_state.get("voice_pipeline"):
@@ -456,7 +461,7 @@ def main():
     with col_left:
         # Reliable timer computation
         elapsed_sec = st.session_state.get("elapsed_seconds", 0)
-        if workout_started and st.session_state.get("workout_start_time"):
+        if workout_started and st.session_state.get("workout_start_time", 0.0) > 0.0:
             elapsed_sec = int(time.time() - st.session_state.workout_start_time)
             st.session_state.elapsed_seconds = elapsed_sec
 
@@ -466,7 +471,7 @@ def main():
 
         # Top camera status banner
         st.markdown(f"""
-<div style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+<div id="live-camera-section" style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
   <div style="font-size: 1.15rem; font-weight: 800; color: #FFFFFF;">🎥 Live Camera — {ex}</div>
   <div style="display: flex; gap: 1.5rem; font-size: 0.88rem; color: #9CA3AF;">
     <span>Target: <strong>{t_sets} sets × {rps} reps</strong></span>
@@ -474,6 +479,12 @@ def main():
   </div>
 </div>
 """, unsafe_allow_html=True)
+
+        if st.session_state.get("scroll_to_camera", False):
+            st.markdown("""
+<img src="x" onerror="try { const doc = window.parent ? window.parent.document : document; const el = doc.getElementById('live-camera-section') || document.getElementById('live-camera-section'); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } else { window.scrollTo({ top: 0, behavior: 'smooth' }); } } catch(e) { window.scrollTo({ top: 0, behavior: 'smooth' }); }" style="display:none;">
+""", unsafe_allow_html=True)
+            st.session_state.scroll_to_camera = False
 
         if st.session_state.get("workout_completed", False) and not workout_started:
             st.markdown(f"""

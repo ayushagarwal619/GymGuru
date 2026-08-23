@@ -20,6 +20,7 @@ def initial_session_defaults():
 
         # Workout plan (set before starting)
         "workout_started": False,
+        "scroll_to_camera": False,
         "plan_exercise": "Squats",
         "exercise_type": "Squats",
         "plan_sets": 3,
