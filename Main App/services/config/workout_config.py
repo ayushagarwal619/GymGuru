@@ -75,6 +75,7 @@ PROMPT = (
 
 
 _TWILIO_CACHE: Dict[str, Any] = {"timestamp": 0.0, "servers": []}
+_METERED_CACHE: Dict[str, Any] = {"timestamp": 0.0, "servers": []}
 
 
 def _get_secret_or_env(key: str, default: str = "") -> Any:
@@ -123,6 +124,73 @@ def _get_twilio_ice_servers(account_sid: str, auth_token: str) -> List[Dict[str,
     return []
 
 
+def _get_metered_ice_servers(api_key: str, domain: str = "") -> List[Dict[str, Any]]:
+    global _METERED_CACHE
+    now = time.time()
+    if _METERED_CACHE["servers"] and (now - _METERED_CACHE["timestamp"]) < 3600:
+        return _METERED_CACHE["servers"]
+
+    try:
+        subdomain = domain.strip() if domain and domain.strip() else "openrelay"
+        url = f"https://{subdomain}.metered.ca/api/v1/turn/credentials?apiKey={api_key.strip()}"
+        req = urllib.request.Request(url, headers={"User-Agent": "GymGuru/1.0"})
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            if resp.status == 200:
+                data = json.loads(resp.read().decode())
+                if isinstance(data, list):
+                    _METERED_CACHE = {"timestamp": now, "servers": data}
+                    return data
+    except Exception:
+        pass
+    return []
+
+
+def _get_hf_turn_servers(token: str) -> List[Dict[str, Any]]:
+    try:
+        from streamlit_webrtc.credentials import get_hf_ice_servers
+        servers = get_hf_ice_servers(token)
+        return [
+            {
+                "urls": s["urls"],
+                "username": s.get("username"),
+                "credential": s.get("credential"),
+            }
+            for s in servers
+            if "urls" in s
+        ]
+    except Exception:
+        pass
+    return []
+
+
+def get_safe_rtc_summary(config: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Returns non-sensitive metadata for diagnostics (zero credentials/secrets).
+    """
+    ice_servers = config.get("iceServers", [])
+    protocols = set()
+    stun_count = 0
+    turn_count = 0
+    for server in ice_servers:
+        urls = server.get("urls", [])
+        if isinstance(urls, str):
+            urls = [urls]
+        for url in urls:
+            proto = url.split(":")[0].lower() if ":" in url else "unknown"
+            protocols.add(proto)
+            if "turn" in proto:
+                turn_count += 1
+            elif "stun" in proto:
+                stun_count += 1
+    return {
+        "total_ice_server_entries": len(ice_servers),
+        "has_turn": turn_count > 0,
+        "protocols": sorted(list(protocols)),
+        "stun_url_count": stun_count,
+        "turn_url_count": turn_count,
+    }
+
+
 def get_rtc_configuration() -> Dict[str, Any]:
     """
     Builds production WebRTC RTCConfiguration with multi-STUN fallback
@@ -158,7 +226,22 @@ def get_rtc_configuration() -> Dict[str, Any]:
         if tw_servers:
             ice_servers.extend(tw_servers)
 
-    # 4. Standard TURN environment variables (Render / Coturn / Metered / Xirsys)
+    # 4. Metered / OpenRelay credentials if provided
+    metered_key = _get_secret_or_env("METERED_API_KEY") or _get_secret_or_env("OPENRELAY_API_KEY")
+    metered_dom = _get_secret_or_env("METERED_DOMAIN") or _get_secret_or_env("OPENRELAY_DOMAIN")
+    if metered_key:
+        m_servers = _get_metered_ice_servers(str(metered_key), str(metered_dom))
+        if m_servers:
+            ice_servers.extend(m_servers)
+
+    # 5. Hugging Face token if provided
+    hf_token = _get_secret_or_env("HF_TOKEN") or _get_secret_or_env("HUGGINGFACE_TOKEN")
+    if hf_token:
+        hf_servers = _get_hf_turn_servers(str(hf_token))
+        if hf_servers:
+            ice_servers.extend(hf_servers)
+
+    # 6. Standard TURN environment variables (Render / Coturn / Metered / Xirsys)
     turn_url = (
         _get_secret_or_env("TURN_SERVER")
         or _get_secret_or_env("TURN_URL")
@@ -184,7 +267,7 @@ def get_rtc_configuration() -> Dict[str, Any]:
             turn_entry["credential"] = str(turn_cred)
         ice_servers.append(turn_entry)
 
-    # 5. Production Google & Cloudflare STUN fallback servers
+    # 7. Production Google & Cloudflare STUN fallback servers
     default_stuns = [
         "stun:stun.l.google.com:19302",
         "stun:stun1.l.google.com:19302",

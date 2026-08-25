@@ -192,21 +192,25 @@ def _render_stat_cards(user_id: int, workout_started: bool) -> None:
 
 
 # ── AI Coach Status Badges ────────────────────────────────────────────────────
-def _get_ai_status(speaking: bool) -> tuple[str, str]:
+def _get_ai_status(speaking: bool, is_playing: bool = False) -> tuple[str, str]:
     if speaking:
         return "Speaking", "status-speaking"
     elif st.session_state.get("workout_started", False):
-        return "Listening", "status-listening"
+        if is_playing:
+            return "Listening", "status-listening"
+        return "Connecting", "status-idle"
     elif st.session_state.get("workout_completed", False):
         return "Complete", "status-listening"
     return "Idle", "status-idle"
 
 
-def _get_posture_status(ex: str) -> tuple[str, str]:
+def _get_posture_status(ex: str, is_playing: bool = True) -> tuple[str, str]:
     if st.session_state.get("workout_completed", False):
         return "Completed", "posture-good"
     if not st.session_state.get("workout_started", False):
         return "Ready", "posture-ready"
+    if not is_playing:
+        return "Connecting...", "posture-ready"
 
     if ex == "Squats":
         depth = st.session_state.get("depth_status", "N/A")
@@ -486,6 +490,7 @@ def main():
 """, unsafe_allow_html=True)
             st.session_state.scroll_to_camera = False
 
+        is_playing = False
         if st.session_state.get("workout_completed", False) and not workout_started:
             st.markdown(f"""
 <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(13, 17, 23, 0.85) 100%); border: 1px solid #22C55E; border-radius: 6px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
@@ -522,11 +527,20 @@ def main():
             inject_webrtc_styles()
             sync_metrics_update(context)
 
+            is_playing = bool(context and hasattr(context, "state") and context.state.playing)
             if context.state.playing:
                 time.sleep(0.25)
                 st.rerun()
 
-        posture_text, posture_cls = _get_posture_status(ex)
+        posture_text, posture_cls = _get_posture_status(ex, is_playing)
+
+        if workout_started:
+            pose_status_str = "● Tracking" if is_playing else "◌ Connecting..."
+            pose_status_color = "#22C55E" if is_playing else "#F59E0B"
+        else:
+            pose_status_str = "○ Offline"
+            pose_status_color = "#9CA3AF"
+
         st.markdown(f"""
 <div style="background: #161B22; border: 1px solid #30363D; border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; text-align: center;">
   <div>
@@ -543,7 +557,7 @@ def main():
   </div>
   <div>
     <div style="font-size: 0.72rem; color: #9CA3AF; text-transform: uppercase; font-weight: 600;">Pose Status</div>
-    <div style="font-size: 1.15rem; font-weight: 800; color: {'#22C55E' if workout_started else '#9CA3AF'}; margin-top: 0.15rem;">{'● Tracking' if workout_started else '○ Offline'}</div>
+    <div style="font-size: 1.15rem; font-weight: 800; color: {pose_status_color}; margin-top: 0.15rem;">{pose_status_str}</div>
   </div>
 </div>
 """, unsafe_allow_html=True)
@@ -557,22 +571,22 @@ def main():
         st.markdown('<div class="dev-card-title" style="margin-bottom: 0.75rem;">AI Coach</div>', unsafe_allow_html=True)
 
         is_speaking = bool(st.session_state.get("audio_to_play"))
-        ai_status_text, ai_status_cls = _get_ai_status(is_speaking)
-        posture_text, posture_cls = _get_posture_status(st.session_state.get("exercise_type", "Squats"))
+        ai_status_text, ai_status_cls = _get_ai_status(is_speaking, is_playing)
+        posture_text, posture_cls = _get_posture_status(st.session_state.get("exercise_type", "Squats"), is_playing)
 
         feedback = st.session_state.get("coach_feedback", "")
         if not feedback:
             feedback = "AI Coach is ready. Start a workout session to analyze posture and receive real-time voice guidance."
 
-        status_dot = "🟢" if workout_started else "⚪"
-        status_text = "Active" if workout_started else "Ready"
+        status_dot = "🟢" if (workout_started and is_playing) else ("🟡" if workout_started else "⚪")
+        status_text = "Active" if (workout_started and is_playing) else ("Connecting..." if workout_started else "Ready")
         voice_state = ai_status_text
 
-        alignment_status = "Checking..." if workout_started else "N/A"
+        alignment_status = "Waiting for camera..." if (workout_started and not is_playing) else ("Checking..." if workout_started else "N/A")
         mistakes_status = "None" if workout_started else "N/A"
         ex_active = st.session_state.get("exercise_type", "Squats")
 
-        if workout_started:
+        if workout_started and is_playing:
             if ex_active == "Squats":
                 alignment_status = st.session_state.get("depth_status", "N/A")
                 if alignment_status == "TOO HIGH":
