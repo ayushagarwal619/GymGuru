@@ -411,7 +411,7 @@ def main():
     st.set_page_config(
         page_icon="🏋️",
         page_title="GymGuru — AI Fitness Coach",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="collapsed",
         layout="wide",
     )
 
@@ -441,9 +441,6 @@ def main():
     workout_started = st.session_state.get("workout_started", False)
     username = st.session_state.get("username", "Athlete")
     user_id = st.session_state.get("user_id", 0)
-
-    # Sidebar
-    _sidebar(workout_started)
 
     # Top Header
     _render_top_header(username)

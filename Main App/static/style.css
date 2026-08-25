@@ -65,9 +65,9 @@ p, li, span, label {
 }
 
 /* Sidebar Styling */
-[data-testid="stSidebar"] {
-  background-color: #161B22 !important;
-  border-right: 1px solid #30363D !important;
+[data-testid="stSidebar"],
+[data-testid="collapsedControl"] {
+  display: none !important;
 }
 
 [data-testid="stSidebarNav"] {
