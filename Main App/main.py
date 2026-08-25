@@ -14,7 +14,7 @@ import streamlit as st
 
 from services.auth.login_wall import render_login_wall
 from services.state.session_defaults import initial_session_defaults
-from services.config.workout_config import EXERCISE_OPTIONS, METRICS_FIELDS
+from services.config.workout_config import EXERCISE_OPTIONS, METRICS_FIELDS, get_rtc_configuration
 from services.ui.style_loader import load_css, inject_local_font, inject_webrtc_styles
 from services.persistence.exercise_repository import init_db, get_users_exercises
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
@@ -514,23 +514,17 @@ def main():
                 key="exercise-analysis",
                 mode=WebRtcMode.SENDRECV,
                 video_processor_factory=VideoProcessorClass,
-                rtc_configuration={
-                    "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-                },
+                rtc_configuration=get_rtc_configuration(),
                 media_stream_constraints={"video": True, "audio": False},
                 async_processing=True,
             )
 
+            inject_webrtc_styles()
             sync_metrics_update(context)
 
             if context.state.playing:
                 time.sleep(0.25)
                 st.rerun()
-            else:
-                time.sleep(1.0)
-                st.rerun()
-
-            inject_webrtc_styles()
 
         posture_text, posture_cls = _get_posture_status(ex)
         st.markdown(f"""
